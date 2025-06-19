@@ -1,29 +1,31 @@
-// src/pages/Home.jsx
+import GenreCard from '../components/GenreCard';
+
 const genres = [
-  { title: "Marvel Characters", emoji: "🦸‍♂️" },
-  { title: "Guess the Song", emoji: "🎵" },
-  { title: "Movie Characters", emoji: "🎬" },
-  { title: "Emotion Quiz", emoji: "😊" },
+  { emoji: '🎬', title: 'Movie Characters', description: 'Guess the film icons' },
+  { emoji: '😄', title: 'Emotion Quiz', description: 'Name that feeling' },
+  { emoji: '🦸', title: 'Marvel Characters', description: 'Which hero is this?' },
+  { emoji: '🎵', title: 'Guess the Song', description: 'Decode the tune' }
 ];
 
 export default function Home() {
   return (
-    <div className="px-6 py-8">
-      <h1 className="text-4xl font-bold text-center mb-6">Welcome to the Emoji Quiz!</h1>
-      <p className="text-center mb-10 text-gray-600">
-        Choose a genre below to test your knowledge. Each one comes with emojis and excitement!
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        {genres.map((genre, index) => (
-          <button
-            key={index}
-            className="bg-purple-100 hover:bg-purple-200 text-purple-900 font-semibold text-xl p-6 rounded-2xl shadow-lg transition"
-          >
-            <span className="text-3xl mr-3">{genre.emoji}</span>
-            {genre.title}
-          </button>
-        ))}
-      </div>
-    </div>
+    <>
+      <section className="relative bg-hero-gradient py-16 text-center">
+        <h1 className="text-5xl font-extrabold mb-4 animate-bounce">🎉 Emoji Quiz Master 🎉</h1>
+        <p className="text-xl max-w-xl mx-auto text-muted">Challenge yourself with fun emoji-based quizzes across 4 genres. Fast, funny, and family-friendly!</p>
+        <button className="mt-6 px-6 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition">Start Playing</button>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Choose a Genre</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {genres.map((g, i) => (
+            <GenreCard key={i} emoji={g.emoji} title={g.title} description={g.description} />
+          ))}
+        </div>
+      </section>
+
+      <footer className="text-center py-6 text-muted">&copy; 2025 Emoji Quiz Master. All rights reserved.</footer>
+    </>
   );
 }

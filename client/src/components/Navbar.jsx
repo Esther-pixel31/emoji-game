@@ -11,9 +11,9 @@ export default function Navbar({ darkMode, setDarkMode }) {
         <span className="text-lg font-bold">EmojiQuiz</span>
       </div>
       <ul className="flex gap-6 font-medium">
-        <li><a href="#" className="hover:text-primary">Home</a></li>
-        <li><a href="#about" className="hover:text-primary">About</a></li>
-        <li><a href="#contact" className="hover:text-primary">Contact</a></li>
+        <li><a href="/" className="hover:text-primary">Home</a></li>
+        <li><a href="/about" className="hover:text-primary">About</a></li>
+        <li><a href="/contact" className="hover:text-primary">Contact</a></li>
       </ul>
     </nav>
   );
