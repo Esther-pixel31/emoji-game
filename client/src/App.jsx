@@ -1,101 +1,44 @@
-import { useState } from "react";
-import GenreSelector from "./components/GenreSelector";
-import QuizCard from "./components/QuizCard";
-import ScoreBoard from "./components/ScoreBoard";
-import Navbar from "./components/Navbar";
+import GenreCard from './components/GenreCard';
+import Navbar from './components/Navbar';
+import './index.css';
+import { useState, useEffect } from 'react';
 
-const data = {
-  marvel: [
-    { id: 1, emojis: "🕷️🧔", answer: "spiderman" },
-    { id: 2, emojis: "🛡️🇺🇸", answer: "captain america" },
-  ],
-  songs: [
-    { id: 3, emojis: "👨🎤🕺", answer: "man in the mirror" },
-  ],
-  movies: [
-    { id: 4, emojis: "🦇👨", answer: "batman" },
-  ],
-  emotions: [
-    { id: 5, emojis: "😢❤️", answer: "broken heart" },
-  ],
-};
+const genres = [
+  { emoji: '🎬', title: 'Movie Characters', description: 'Guess the film icons' },
+  { emoji: '😄', title: 'Emotion Quiz', description: 'Name that feeling' },
+  { emoji: '🦸', title: 'Marvel Characters', description: 'Which hero is this?' },
+  { emoji: '🎵', title: 'Guess the Song', description: 'Decode the tune' }
+];
 
 export default function App() {
-  const [genre, setGenre] = useState(null);
-  const [quizzes, setQuizzes] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answer, setAnswer] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [correctAnswers, setCorrectAnswers] = useState(new Set());
-  const [wrongAnswers, setWrongAnswers] = useState(new Set());
+  const [darkMode, setDarkMode] = useState(false);
 
-  const handleSelectGenre = (selected) => {
-    setGenre(selected);
-    setQuizzes(data[selected]);
-    setCurrentIndex(0);
-    setAnswer("");
-    setFeedback("");
-    setCorrectAnswers(new Set());
-    setWrongAnswers(new Set());
-  };
-
-  const handleSubmit = () => {
-    const quiz = quizzes[currentIndex];
-    const correct = quiz.answer.toLowerCase().trim();
-    const userAnswer = answer.toLowerCase().trim();
-
-    if (userAnswer === correct) {
-      setFeedback("✅ Correct!");
-      setCorrectAnswers((prev) => new Set(prev).add(quiz.id));
-      setWrongAnswers((prev) => {
-        const next = new Set(prev);
-        next.delete(quiz.id);
-        return next;
-      });
-    } else {
-      setFeedback("❌ Wrong");
-      setWrongAnswers((prev) => new Set(prev).add(quiz.id));
-      setCorrectAnswers((prev) => {
-        const next = new Set(prev);
-        next.delete(quiz.id);
-        return next;
-      });
-    }
-  };
-
-  const handleNext = () => {
-    setFeedback("");
-    setAnswer("");
-    setCurrentIndex((i) => (i + 1) % quizzes.length);
-  };
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   return (
-    <>
-      <Navbar />
-      {!genre ? (
-        <GenreSelector onSelect={handleSelectGenre} />
-      ) : (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-6">
-          <QuizCard
-            quiz={quizzes[currentIndex]}
-            answer={answer}
-            setAnswer={setAnswer}
-            feedback={feedback}
-            onSubmit={handleSubmit}
-            onNext={handleNext}
-          />
-          <ScoreBoard
-            correct={correctAnswers.size}
-            wrong={wrongAnswers.size}
-          />
-          <button
-            onClick={() => setGenre(null)}
-            className="mt-6 text-sm text-red-500 underline"
-          >
-            ⬅️ Change Genre
-          </button>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+
+      <section className="relative bg-hero-gradient py-16 text-center">
+        <h1 className="text-5xl font-extrabold mb-4 animate-bounce">🎉 Emoji Quiz Master 🎉</h1>
+        <p className="text-xl max-w-xl mx-auto text-muted">Challenge yourself with fun emoji-based quizzes across 4 genres. Fast, funny, and family-friendly!</p>
+        <button className="mt-6 px-6 py-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition">Start Playing</button>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Choose a Genre</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {genres.map((g, i) => (
+            <GenreCard key={i} emoji={g.emoji} title={g.title} description={g.description} />
+          ))}
         </div>
-      )}
-    </>
+      </section>
+
+      <footer className="text-center py-6 text-muted">&copy; 2025 Emoji Quiz Master. All rights reserved.</footer>
+    </div>
   );
 }
