@@ -3,6 +3,10 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import MovieQuiz from './pages/MovieQuiz';
+import EmotionQuiz from './pages/EmotionQuiz';
+import MarvelQuiz from './pages/MarvelQuiz';
+import SongQuiz from './pages/SongQuiz';
 import './index.css';
 import { useState, useEffect } from 'react';
 
@@ -23,6 +27,10 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/quiz/moviecharacters" element={<MovieQuiz />} />
+          <Route path="/quiz/emotionquiz" element={<EmotionQuiz />} />
+          <Route path="/quiz/marvelcharacters" element={<MarvelQuiz />} />
+          <Route path="/quiz/guesssongs" element={<SongQuiz />} />
         </Routes>
       </Router>
     </div>
