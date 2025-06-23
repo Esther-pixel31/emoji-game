@@ -216,6 +216,7 @@ def add_history():
     )
     db.session.add(history)
     db.session.commit()
+    print("📥 Incoming history:", data)
 
     return jsonify({'message': 'History added'}), 201
 
@@ -228,10 +229,21 @@ def me():
     if not user:
         return jsonify(message="User not found"), 404
 
+    history = [
+        {
+            "genre": h.genre,
+            "score": h.score,
+            "total": h.total,
+            "date": h.date_played.isoformat(),
+        }
+        for h in user.history  # This assumes a relationship is defined
+    ]
+
     return jsonify({
         "id": user.id,
         "username": user.username,
-        "points": user.points,  # Make sure `points` exists on your model
+        "points": user.points,
+        "history": history,
     }), 200
 
 # Run Server

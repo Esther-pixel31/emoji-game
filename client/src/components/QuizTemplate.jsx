@@ -11,7 +11,7 @@ export default function QuizTemplate({ title, questions, genreKey }) {
   const [timer, setTimer] = useState(60);
   const current = questions[index];
 
-  const { refreshUser } = useAuth(); // 🧠 Import refreshUser
+  const { fetchWithAutoRefresh, refreshUser } = useAuth();
 
   // Timer logic
   useEffect(() => {
@@ -48,30 +48,23 @@ export default function QuizTemplate({ title, questions, genreKey }) {
   };
 
   // Called once after quiz completes
-  const handleQuizComplete = async () => {
+
+const handleQuizComplete = async () => {
   try {
-    const token = localStorage.getItem('auth_token');
-    console.log("🛡️ Auth token:", token);
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    // Update points
-    const res = await fetch('http://localhost:5000/api/update-points', {
+    // 🏆 Update points
+    const res = await fetchWithAutoRefresh('/update-points', {
       method: 'POST',
-      headers,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ points: score * 5 }),
     });
 
     const resData = await res.json();
-    console.log("📦 Update Points Response:", res.status, resData);
+    console.log("✅ Points updated:", res.status, resData);
 
-    // Save history
-    await fetch('http://localhost:5000/api/add-history', {
+    // 🧠 Save quiz history
+    await fetchWithAutoRefresh('/add-history', {
       method: 'POST',
-      headers,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         genre: genreKey,
         score,
@@ -80,10 +73,11 @@ export default function QuizTemplate({ title, questions, genreKey }) {
       }),
     });
 
-    await refreshUser(); // ✅ Update local user state
+    // 🔄 Update user state (points in UI)
+    await refreshUser();
 
   } catch (err) {
-    console.error('❌ Error finalizing quiz', err);
+    console.error('❌ Quiz finalization error:', err);
   }
 };
 

@@ -67,30 +67,60 @@ export default function ProfileMenu() {
   return (
     <>
       <div className="relative text-sm text-right">
-        {user ? (
-          <div className="flex items-center gap-2">
+      {user ? (
+        <div className="relative group">
+          <div className="flex items-center gap-2 cursor-pointer">
             <FaUserCircle className="text-xl text-primary" />
-            <div>
-              <p className="font-semibold">{user.username}</p>
-              <p className="text-xs text-muted">⭐ {user.points} pts</p>
-            </div>
+            <p className="font-semibold text-sm flex items-center gap-2">
+              {user.username}
+              <span className="text-xs text-muted">⭐ {user.points} pts</span>
+            </p>
+          </div>
+
+          <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg w-64 p-4 hidden group-hover:block z-10 text-left">
+            <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Account</p>
+
+            <a
+              href="/history"
+              className="block text-sm text-primary hover:underline mb-3"
+            >
+              View Full History →
+            </a>
+
+            <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Recent Games</p>
+            {user.history?.length ? (
+              <ul className="text-sm space-y-1">
+                {user.history.slice(0, 3).map((game, idx) => (
+                  <li key={idx} className="text-muted-foreground">
+                    {game.genre} – {game.score}/{game.total} on{" "}
+                    {new Date(game.date).toLocaleDateString()}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-muted">No history yet.</p>
+            )}
+
             <button
               onClick={() => {
                 logout();
-                toast('Logged out');
+                toast("Logged out");
               }}
-              className="ml-2 px-2 py-1 text-xs bg-red-500 text-white rounded"
+              className="mt-3 w-full px-3 py-1 text-xs bg-red-500 text-white rounded"
             >
               Logout
             </button>
+
+
           </div>
-        ) : (
-          <FaUserCircle
-            className="text-2xl cursor-pointer text-gray-600 dark:text-gray-300 hover:text-primary"
-            onClick={() => setShowModal(true)}
-          />
-        )}
-      </div>
+        </div>
+      ) : (
+        <FaUserCircle
+          className="text-2xl cursor-pointer text-gray-600 dark:text-gray-300 hover:text-primary"
+          onClick={() => setShowModal(true)}
+        />
+      )}
+    </div>
 
       <AnimatePresence>
         {showModal && (
@@ -176,7 +206,7 @@ export default function ProfileMenu() {
                   className="underline"
                   onClick={() => window.open('/login/google', '_self')}
                 >
-                  Login with Google
+                  ..
                 </button>
               </div>
 

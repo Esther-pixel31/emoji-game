@@ -3,6 +3,8 @@ import ProfileMenu from './ProfileMenu';
 export default function Navbar({ darkMode, setDarkMode }) {
   return (
     <nav className="flex justify-between items-center px-6 py-4 bg-nav text-nav-text shadow">
+      
+      {/* Left side: Logo + toggle */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => setDarkMode(!darkMode)}
@@ -12,14 +14,15 @@ export default function Navbar({ darkMode, setDarkMode }) {
         </button>
         <span className="text-lg font-bold">EmojiQuiz</span>
       </div>
-      <ul className="flex gap-6 font-medium">
-        <li><a href="/" className="hover:text-primary">Home</a></li>
-        <li><a href="/about" className="hover:text-primary">About</a></li>
-        <li><a href="/contact" className="hover:text-primary">Contact</a></li>
-        <nav className="... flex justify-between items-center">
-            <ProfileMenu />
-        </nav>
-      </ul>
+
+      {/* Right side: Links + Profile */}
+      <div className="flex items-center gap-6">
+        <a href="/" className="hover:text-primary">Home</a>
+        <a href="/about" className="hover:text-primary">About</a>
+        <a href="/contact" className="hover:text-primary">Contact</a>
+        <ProfileMenu />
+      </div>
+
     </nav>
   );
 }
