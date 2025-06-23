@@ -1,3 +1,5 @@
+import ProfileMenu from './ProfileMenu';
+
 export default function Navbar({ darkMode, setDarkMode }) {
   return (
     <nav className="flex justify-between items-center px-6 py-4 bg-nav text-nav-text shadow">
@@ -14,6 +16,9 @@ export default function Navbar({ darkMode, setDarkMode }) {
         <li><a href="/" className="hover:text-primary">Home</a></li>
         <li><a href="/about" className="hover:text-primary">About</a></li>
         <li><a href="/contact" className="hover:text-primary">Contact</a></li>
+        <nav className="... flex justify-between items-center">
+            <ProfileMenu />
+        </nav>
       </ul>
     </nav>
   );

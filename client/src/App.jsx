@@ -9,6 +9,7 @@ import MarvelQuiz from './pages/MarvelQuiz';
 import SongQuiz from './pages/SongQuiz';
 import './index.css';
 import { useState, useEffect } from 'react';
+import OAuthSuccess from './pages/OAuthSuccess';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/quiz/emotionquiz" element={<EmotionQuiz />} />
           <Route path="/quiz/marvelcharacters" element={<MarvelQuiz />} />
           <Route path="/quiz/guesssongs" element={<SongQuiz />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
         </Routes>
       </Router>
     </div>
