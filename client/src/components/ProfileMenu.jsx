@@ -1,25 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FaUserCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function ProfileMenu() {
   const { user, login, logout } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ email: '', password: '', username: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [tab, setTab] = useState('login'); // 'login' or 'register'
+  const [tab, setTab] = useState('login');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setShowModal(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   const handleSubmit = async () => {
-    const endpoint = tab === 'register' ? '/register' : '/login';
-
+    const endpoint = tab === 'register' ? '/api/register' : '/api/login';
     const payload = {
-      email: form.email,
+      email: form.email.trim(),
       password: form.password,
-      ...(tab === 'register' && { username: form.username }),
+      ...(tab === 'register' && { username: form.username.trim() }),
     };
 
     if (!payload.email || !payload.password || (tab === 'register' && !payload.username)) {
@@ -28,24 +34,34 @@ export default function ProfileMenu() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}${endpoint}`, {
+      setLoading(true);
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // <== VERY IMPORTANT
         body: JSON.stringify(payload),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to submit');
 
-      login({ ...data.user, token: data.token });
-      localStorage.setItem('auth_token', data.token);
-      toast.success(tab === 'login' ? `Welcome back, ${data.user.username}!` : `Account created! 🎉`);
+      if (!res.ok) throw new Error(data.message || 'Failed to authenticate');
 
+      // Let the AuthContext handle the state
+      await login(); // Fetch user from /api/me and set context
+
+      toast.success(tab === 'login' ? `Welcome back, ${data.user?.username || 'User'}!` : 'Account created 🎉');
       setForm({ email: '', password: '', username: '' });
       setShowModal(false);
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSubmit();
   };
 
   return (
@@ -90,7 +106,7 @@ export default function ProfileMenu() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96 max-w-full shadow-lg relative"
             >
-              {/* Toggle Tabs */}
+              {/* Tabs */}
               <div className="flex justify-between mb-4 border-b">
                 {['login', 'register'].map((t) => (
                   <button
@@ -98,28 +114,33 @@ export default function ProfileMenu() {
                     className={`w-1/2 py-2 font-semibold ${
                       tab === t ? 'border-b-2 border-primary text-primary' : 'text-muted'
                     }`}
-                    onClick={() => setTab(t)}
+                    onClick={() => {
+                      setTab(t);
+                      setForm({ email: '', password: '', username: '' });
+                    }}
                   >
                     {t === 'login' ? 'Login' : 'Register'}
                   </button>
                 ))}
               </div>
 
-              {/* Dynamic Fields */}
               {tab === 'register' && (
                 <input
                   type="text"
                   placeholder="Username"
                   value={form.username}
                   onChange={(e) => setForm({ ...form, username: e.target.value })}
+                  onKeyDown={handleKeyDown}
                   className="w-full mb-2 px-3 py-2 border rounded text-sm bg-background text-foreground"
                 />
               )}
+
               <input
                 type="email"
                 placeholder="Email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+                onKeyDown={handleKeyDown}
                 className="w-full mb-2 px-3 py-2 border rounded text-sm bg-background text-foreground"
               />
 
@@ -129,6 +150,7 @@ export default function ProfileMenu() {
                   placeholder="Password"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-3 py-2 border rounded text-sm pr-10 bg-background text-foreground"
                 />
                 <span
@@ -141,17 +163,18 @@ export default function ProfileMenu() {
 
               <button
                 onClick={handleSubmit}
-                className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark text-sm"
+                disabled={loading}
+                className={`w-full bg-primary text-white py-2 rounded text-sm ${
+                  loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                }`}
               >
-                {tab === 'login' ? 'Login' : 'Register'}
+                {loading ? 'Submitting...' : tab === 'login' ? 'Login' : 'Register'}
               </button>
 
               <div className="text-xs text-center text-muted mt-3">
                 <button
                   className="underline"
-                  onClick={() => {
-                    window.location.href = 'http://localhost:5000/login/google';
-                  }}
+                  onClick={() => window.open('/login/google', '_self')}
                 >
                   Login with Google
                 </button>
