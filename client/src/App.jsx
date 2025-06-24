@@ -9,17 +9,21 @@ import MarvelQuiz from './pages/MarvelQuiz';
 import SongQuiz from './pages/SongQuiz';
 import './index.css';
 import { useState, useEffect } from 'react';
-import OAuthSuccess from './pages/OAuthSuccess';
+import LeaderboardPage from './pages/LeaderboardPage';
 import History from "./pages/History";
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
-
+  const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem('theme') === 'dark';
+});
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(darkMode ? 'dark' : 'light');
-  }, [darkMode]);
+  const root = document.documentElement;
+  root.classList.remove('light', 'dark');
+  root.classList.add(darkMode ? 'dark' : 'light');
+
+  // ✅ Save to localStorage
+  localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+}, [darkMode]);
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
@@ -32,9 +36,10 @@ export default function App() {
           <Route path="/quiz/moviecharacters" element={<MovieQuiz />} />
           <Route path="/quiz/emotionquiz" element={<EmotionQuiz />} />
           <Route path="/quiz/marvelcharacters" element={<MarvelQuiz />} />
-          <Route path="/quiz/guesssongs" element={<SongQuiz />} />
-          <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/quiz/guessthesong" element={<SongQuiz />} />
           <Route path="/history" element={<History />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+
         </Routes>
       </Router>
     </div>

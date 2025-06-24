@@ -20,6 +20,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
         <a href="/" className="hover:text-primary">Home</a>
         <a href="/about" className="hover:text-primary">About</a>
         <a href="/contact" className="hover:text-primary">Contact</a>
+        <a href="/leaderboard" className="hover:text-primary">Leaderboard</a>
         <ProfileMenu />
       </div>
 

@@ -12,6 +12,7 @@ from flask_cors import CORS
 from passlib.hash import pbkdf2_sha256
 from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
+from dateutil.parser import isoparse
 
 # Allow HTTP for OAuth (not recommended in production)
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -206,19 +207,26 @@ def add_history():
     if not user:
         return jsonify(message="User not found"), 404
 
-    data = request.get_json()
-    history = GameHistory(
-        genre=data['genre'],
-        score=data['score'],
-        total=data['total'],
-        date_played=datetime.fromisoformat(data['date']),
-        user_id=user.id
-    )
-    db.session.add(history)
-    db.session.commit()
-    print("📥 Incoming history:", data)
+    try:
+        data = request.get_json()
+        print("📥 Incoming history data:", data)
 
-    return jsonify({'message': 'History added'}), 201
+        history = GameHistory(
+            genre=data['genre'],
+            score=data['score'],
+            total=data['total'],
+            date_played=isoparse(data['date']),
+            user_id=user.id
+        )
+
+        db.session.add(history)
+        db.session.commit()
+        return jsonify({'message': 'History added'}), 201
+
+    except Exception as e:
+        print("❌ History add error:", str(e))
+        return jsonify({'message': 'Server error', 'error': str(e)}), 500
+
 
 @app.route('/api/me', methods=['GET'])
 @jwt_required()
@@ -245,6 +253,14 @@ def me():
         "points": user.points,
         "history": history,
     }), 200
+
+@app.route('/api/leaderboard')
+def leaderboard():
+    top_users = User.query.order_by(User.points.desc()).limit(10).all()
+    return jsonify([
+        {"username": u.username, "points": u.points}
+        for u in top_users
+    ])
 
 # Run Server
 if __name__ == '__main__':
