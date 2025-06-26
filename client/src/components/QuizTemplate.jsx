@@ -33,42 +33,52 @@ export default function QuizTemplate({ title, questions, genreKey }) {
     }, 1000);
     return () => clearInterval(interval);
   }, [timer, showResult]);
-
+  
   const normalize = (str) =>
     str.trim().toLowerCase().replace(/[^a-z0-9]/gi, '');
 
   const handleSubmit = () => {
-    const correct = normalize(userAnswer) === normalize(current.answer);
+  const acceptedAnswers = [
+    current.answer,
+    ...(current.options || []),
+  ].map(normalize);
 
-    setAnswers((prev) => [
-      ...prev,
-      { question: current.question, correctAnswer: current.answer, userAnswer }
-    ]);
+  const isCorrect = acceptedAnswers.includes(normalize(userAnswer));
 
-    if (correct) {
-      const earned = 50; // base points
-      const streakBonus = earned * multiplier;
-      setScore((prev) => prev + streakBonus);
+  setAnswers((prev) => [
+    ...prev,
+    {
+      question: current.question,
+      correctAnswer: current.answer,
+      userAnswer,
+    },
+  ]);
 
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      setMultiplier(1 + Math.floor(newStreak / 3));
-    } else {
-      setWrong((prev) => prev + 1);
-      setStreak(0);
-      setMultiplier(1);
-    }
+  if (isCorrect) {
+    const earned = 50;
+    const streakBonus = earned * multiplier;
+    setScore((prev) => prev + streakBonus);
 
-    const hasNext = index + 1 < questions.length;
-    if (hasNext) {
-      setIndex((prev) => prev + 1);
-      setUserAnswer('');
-      setTimer(60);
-      setShowHint(false);
-    } else {
-      setShowResult(true);
-    }
-  };
+    const newStreak = streak + 1;
+    setStreak(newStreak);
+    setMultiplier(1 + Math.floor(newStreak / 3));
+  } else {
+    setWrong((prev) => prev + 1);
+    setStreak(0);
+    setMultiplier(1);
+  }
+
+  const hasNext = index + 1 < questions.length;
+  if (hasNext) {
+    setIndex((prev) => prev + 1);
+    setUserAnswer('');
+    setTimer(60);
+    setShowHint(false);
+  } else {
+    setShowResult(true);
+  }
+};
+
 
   useEffect(() => {
     if (!showResult) return;
@@ -116,24 +126,25 @@ export default function QuizTemplate({ title, questions, genreKey }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="bg-card p-6 rounded-lg shadow relative flex gap-6 justify-between items-center"
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="bg-card p-6 rounded-2xl shadow-xl border border-border transition-all"
             >
               <div className="flex-1">
                 <div className="text-5xl mb-4">{current.question}</div>
+
                 <input
                   type="text"
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Your answer"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md bg-background text-foreground"
+                  className="w-full px-4 py-2 border border-border rounded-md bg-background text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowHint(true)}
-                  className="mt-2 text-xs text-blue-500 underline"
+                  className="mt-2 text-xs text-blue-600 dark:text-blue-400 underline hover:text-blue-800"
                 >
                   Show Hint
                 </button>
@@ -147,14 +158,17 @@ export default function QuizTemplate({ title, questions, genreKey }) {
                 <button
                   onClick={handleSubmit}
                   disabled={!userAnswer.trim()}
-                  className={`mt-4 px-6 py-2 rounded-md text-white ${
-                    userAnswer.trim()
-                      ? 'bg-primary hover:bg-primary-dark'
-                      : 'bg-gray-400 cursor-not-allowed'
-                  }`}
+                  className={`mt-4 px-6 py-2 rounded-md transition-colors duration-300 font-semibold text-sm
+                    ${
+                      userAnswer.trim()
+                        ? 'bg-primary text-white hover:bg-primary/90 active:scale-95'
+                        : 'bg-muted text-muted-foreground cursor-not-allowed'
+                    }
+                  `}
                 >
                   Submit
                 </button>
+
                 <ScoreBoard correct={score} wrong={wrong} />
               </div>
             </motion.div>
@@ -165,35 +179,40 @@ export default function QuizTemplate({ title, questions, genreKey }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.4 }}
-              className="bg-card p-6 rounded-lg shadow"
+              className="bg-card p-6 rounded-2xl shadow-lg border border-border"
             >
               <h2 className="text-2xl font-semibold mb-4">🎉 Quiz Complete!</h2>
               <p className="text-lg mb-2">
-                You scored {score} points from {questions.length} questions
+                You scored <strong>{score}</strong> points from {questions.length} questions
               </p>
-              <p className="text-muted mt-2">
+              <p className="text-muted-foreground mt-2 text-sm">
                 Your points include multiplier bonuses for consecutive correct answers.
               </p>
 
               <div className="mt-6 text-left max-w-xl mx-auto">
-                <h3 className="text-xl font-semibold mb-2">📘 Review Answers</h3>
+                <h3 className="text-xl font-semibold mb-3">📘 Review Answers</h3>
                 <ul className="space-y-3 text-sm">
                   {answers.map((entry, i) => (
-                    <li key={i} className="p-3 border rounded-md bg-muted">
-                      <div className="text-2xl mb-1">{entry.question}</div>
+                    <li key={i} className="p-3 border rounded-md bg-muted text-foreground shadow-sm">
+                      <div className="text-xl font-medium mb-1">{entry.question}</div>
                       <p>
                         Your Answer:{' '}
                         <span
                           className={
-                            normalize(entry.userAnswer) === normalize(entry.correctAnswer)
-                              ? 'text-green-600'
-                              : 'text-red-600'
+                            [entry.correctAnswer, ...(questions[i].options || [])]
+                              .map(normalize)
+                              .includes(normalize(entry.userAnswer))
+                              ? 'text-green-600 dark:text-green-400 font-semibold'
+                              : 'text-red-600 dark:text-red-400 font-semibold'
                           }
                         >
+
                           {entry.userAnswer || <em>Skipped</em>}
                         </span>
                       </p>
-                      <p className="text-gray-700">Correct Answer: {entry.correctAnswer}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Correct Answer: <span className="font-medium">{entry.correctAnswer}</span>
+                      </p>
                     </li>
                   ))}
                 </ul>

@@ -4,6 +4,7 @@ import { FaUserCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
+
 export default function ProfileMenu() {
   const { user, login, logout } = useAuth();
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +14,9 @@ export default function ProfileMenu() {
   const [loading, setLoading] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const dropdownRef = useRef();
+  const [leaderboard, setLeaderboard] = useState([]);
 
+  // Close dropdown on outside click or Escape
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') setShowModal(false);
@@ -31,6 +34,15 @@ export default function ProfileMenu() {
     };
   }, []);
 
+  useEffect(() => {
+    if (openMenu && user) {
+      fetch('/api/leaderboard')
+        .then((res) => res.json())
+        .then((data) => setLeaderboard(data.slice(0, 3)))
+        .catch((err) => console.error('Leaderboard fetch error:', err));
+    }
+  }, [openMenu, user]);
+
   const handleSubmit = async () => {
     const endpoint = tab === 'register' ? '/api/register' : '/api/login';
     const payload = {
@@ -46,7 +58,6 @@ export default function ProfileMenu() {
 
     try {
       setLoading(true);
-
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,8 +68,7 @@ export default function ProfileMenu() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to authenticate');
 
-      await login(); // fetch /me
-
+      await login();
       toast.success(tab === 'login' ? `Welcome back, ${data.user?.username || 'User'}!` : 'Account created 🎉');
       setForm({ email: '', password: '', username: '' });
       setShowModal(false);
@@ -90,26 +100,44 @@ export default function ProfileMenu() {
             </div>
 
             {openMenu && (
-              <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg w-64 p-4 z-10 text-left">
-                <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Account</p>
-
-                <a href="/history" className="block text-sm text-primary hover:underline mb-3">
-                  View Full History →
+              <div className="absolute right-0 mt-2 bg-card text-foreground rounded-md shadow-lg w-64 p-4 z-10 text-left">
+                {/* Leaderboard */}
+                <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Leaderboard</p>
+                <ul className="text-sm space-y-1 mb-3">
+                  {leaderboard.length === 0 ? (
+                    <p className="text-xs text-muted">No data yet.</p>
+                  ) : (
+                    leaderboard.map((u, idx) => (
+                      <li key={idx} className="flex justify-between text-muted-foreground">
+                        <span>
+                          {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'} {u.username}
+                        </span>
+                        <span className="text-primary font-semibold">{u.points}</span>
+                      </li>
+                    ))
+                  )}
+                </ul>
+                <a href="/leaderboard" className="block text-sm text-primary hover:underline mb-3">
+                  View Full Leaderboard →
                 </a>
 
+                {/* History */}
                 <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Recent Games</p>
                 {user.history?.length ? (
                   <ul className="text-sm space-y-1">
                     {user.history.slice(0, 3).map((game, idx) => (
                       <li key={idx} className="text-muted-foreground">
-                        {game.genre} – {game.score}/{game.total} on{' '}
-                        {new Date(game.date).toLocaleDateString()}
+                        {game.genre} – {game.score}/{game.total} on {new Date(game.date).toLocaleDateString()}
                       </li>
                     ))}
                   </ul>
                 ) : (
                   <p className="text-xs text-muted">No history yet.</p>
                 )}
+
+                <a href="/history" className="block text-sm text-primary hover:underline mt-2">
+                  View Full History →
+                </a>
 
                 <button
                   onClick={() => {
@@ -132,6 +160,7 @@ export default function ProfileMenu() {
         )}
       </div>
 
+      {/* Login/Signup Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -144,7 +173,7 @@ export default function ProfileMenu() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96 max-w-full shadow-lg relative"
+              className="bg-card text-foreground p-6 rounded-lg w-96 max-w-full shadow-lg relative"
             >
               {/* Tabs */}
               <div className="flex justify-between mb-4 border-b">
@@ -171,7 +200,7 @@ export default function ProfileMenu() {
                   value={form.username}
                   onChange={(e) => setForm({ ...form, username: e.target.value })}
                   onKeyDown={handleKeyDown}
-                  className="w-full mb-2 px-3 py-2 border rounded text-sm bg-background text-foreground"
+                  className="w-full mb-2 px-3 py-2 border border-default bg-background text-foreground"
                 />
               )}
 
@@ -181,7 +210,7 @@ export default function ProfileMenu() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 onKeyDown={handleKeyDown}
-                className="w-full mb-2 px-3 py-2 border rounded text-sm bg-background text-foreground"
+                className="w-full mb-2 px-3 py-2 border border-default bg-background text-foreground"
               />
 
               <div className="relative mb-4">
@@ -191,10 +220,10 @@ export default function ProfileMenu() {
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   onKeyDown={handleKeyDown}
-                  className="w-full px-3 py-2 border rounded text-sm pr-10 bg-background text-foreground"
+                  className="w-full px-3 py-2 border border-default bg-background text-foreground"
                 />
                 <span
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-muted"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -230,6 +259,7 @@ export default function ProfileMenu() {
           </motion.div>
         )}
       </AnimatePresence>
+
     </>
   );
 }

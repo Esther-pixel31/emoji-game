@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HistoryPage() {
   const { user } = useAuth();
@@ -16,6 +17,22 @@ export default function HistoryPage() {
 
   const [categoryFilter, setCategoryFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+
+  // Flexible genre mapping
+  const genreRoutes = {
+    moviecharacters: 'moviecharacters',
+    movies: 'moviecharacters',
+    'movie characters': 'moviecharacters',
+    emotionquiz: 'emotionquiz',
+    emotions: 'emotionquiz',
+    'emotion quiz': 'emotionquiz',
+    marvel: 'marvelcharacters',
+    'marvel heroes': 'marvelcharacters',
+    marvelcharacters: 'marvelcharacters',
+    songs: 'guessthesong',
+    'guess the song': 'guessthesong',
+    guessthesong: 'guessthesong',
+  };
 
   if (!user || !user.history) {
     return <div className="p-6 text-center">Loading history...</div>;
@@ -37,8 +54,24 @@ export default function HistoryPage() {
       score: entry.score,
     }));
 
+  const handleReplay = (genre) => {
+    const normalized = genre.toLowerCase().replace(/\s+/g, '');
+    const path = genreRoutes[normalized];
+    if (path) {
+      navigate(`/quiz/${path}`);
+    } else {
+      console.warn(`No route defined for genre: ${genre}`);
+    }
+  };
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <motion.div
+      className="p-6 max-w-4xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4 }}
+    >
       <h1 className="text-2xl font-bold mb-6">📊 Quiz History</h1>
 
       {/* Filters */}
@@ -66,27 +99,37 @@ export default function HistoryPage() {
 
       {/* History List */}
       {filteredHistory.length ? (
-        <div className="space-y-4">
-          {filteredHistory.map((game, idx) => (
-            <div
-              key={idx}
-              className="p-4 border rounded shadow-sm bg-white dark:bg-gray-800"
-            >
-              <p className="text-sm text-muted-foreground">
-                <strong>{game.genre}</strong> — {game.score}/{game.total}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {new Date(game.date).toLocaleString()}
-              </p>
-              <button
-                onClick={() => navigate(`/quiz/${game.genre}`)}
-                className="mt-2 text-sm text-blue-500 underline"
+        <AnimatePresence>
+          <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {filteredHistory.map((game, idx) => (
+              <motion.div
+                key={idx}
+                className="p-4 border rounded shadow-sm bg-white dark:bg-gray-800"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
               >
-                Replay this quiz
-              </button>
-            </div>
-          ))}
-        </div>
+                <p className="text-sm text-muted-foreground">
+                  <strong>{game.genre}</strong> — {game.score}/{game.total}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {new Date(game.date).toLocaleString()}
+                </p>
+                <button
+                  onClick={() => handleReplay(game.genre)}
+                  className="mt-2 text-sm text-blue-500 underline"
+                >
+                  Replay this quiz
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       ) : (
         <p className="text-sm text-gray-500">No matching history found.</p>
       )}
@@ -103,6 +146,6 @@ export default function HistoryPage() {
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </motion.div>
   );
 }

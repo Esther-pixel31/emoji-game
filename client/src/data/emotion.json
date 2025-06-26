@@ -1,634 +1,94 @@
 [
-  {
-    "question": "😄😊😃",
-    "answer": "Happy",
-    "difficulty": "easy",
-    "hint": "Feeling good and smiling",
-    "options": ["Happy", "Sad", "Angry", "Confused"]
-  },
-  {
-    "question": "😢😭😞",
-    "answer": "Sad",
-    "difficulty": "easy",
-    "hint": "Feeling down or upset",
-    "options": ["Sad", "Happy", "Excited", "Sleepy"]
-  },
-  {
-    "question": "😡😠💢",
-    "answer": "Angry",
-    "difficulty": "easy",
-    "hint": "Hot-tempered emotion",
-    "options": ["Angry", "Joyful", "Nervous", "Lonely"]
-  },
-  {
-    "question": "😱😨😰",
-    "answer": "Scared",
-    "difficulty": "easy",
-    "hint": "Terror-struck and panicking",
-    "options": ["Scared", "Excited", "Calm", "Curious"]
-  },
-  {
-    "question": "😴💤😪",
-    "answer": "Sleepy",
-    "difficulty": "easy",
-    "hint": "Heavy eyelids and yawning",
-    "options": ["Sleepy", "Happy", "Energetic", "Focused"]
-  },
-  {
-    "question": "😂🤣😹",
-    "answer": "Laughing",
-    "difficulty": "easy",
-    "hint": "Finding something very funny",
-    "options": ["Laughing", "Crying", "Shouting", "Daydreaming"]
-  },
-  {
-    "question": "😋😛😜",
-    "answer": "Playful",
-    "difficulty": "easy",
-    "hint": "In a silly mood",
-    "options": ["Playful", "Bored", "Angry", "Afraid"]
-  },
-  {
-    "question": "😍🥰😘",
-    "answer": "Loving",
-    "difficulty": "easy",
-    "hint": "Showing affection",
-    "options": ["Loving", "Lonely", "Annoyed", "Grumpy"]
-  },
-  {
-    "question": "😎🆒🕶️",
-    "answer": "Cool",
-    "difficulty": "easy",
-    "hint": "Feeling stylish or confident",
-    "options": ["Cool", "Shy", "Tired", "Scared"]
-  },
-  {
-    "question": "😳😳😅",
-    "answer": "Embarrassed",
-    "difficulty": "easy",
-    "hint": "A little red in the face",
-    "options": ["Embarrassed", "Angry", "Excited", "Confused"]
-  },
-  {
-    "question": "🤔💭❓",
-    "answer": "Thinking",
-    "difficulty": "easy",
-    "hint": "Deep in thought",
-    "options": ["Thinking", "Confused", "Afraid", "Sad"]
-  },
-  {
-    "question": "😇✨🙏",
-    "answer": "Peaceful",
-    "difficulty": "easy",
-    "hint": "Calm and good-hearted",
-    "options": ["Peaceful", "Excited", "Angry", "Bored"]
-  },
-  {
-    "question": "😜😝🙃",
-    "answer": "Silly",
-    "difficulty": "easy",
-    "hint": "Just goofing around",
-    "options": ["Silly", "Tired", "Shy", "Frightened"]
-  },
-  {
-    "question": "🥶❄️😰",
-    "answer": "Cold",
-    "difficulty": "easy",
-    "hint": "Temperature related feeling",
-    "options": ["Cold", "Hot", "Tired", "Hungry"]
-  },
-  {
-    "question": "🥵🔥😓",
-    "answer": "Hot",
-    "difficulty": "easy",
-    "hint": "Too much heat",
-    "options": ["Hot", "Sleepy", "Chilly", "Excited"]
-  },
-  {
-    "question": "🥱😴😪",
-    "answer": "Tired",
-    "difficulty": "easy",
-    "hint": "Lacking energy",
-    "options": ["Tired", "Happy", "Angry", "Nervous"]
-  },
-  {
-    "question": "🤗😊💞",
-    "answer": "Comforted",
-    "difficulty": "easy",
-    "hint": "A warm embrace",
-    "options": ["Comforted", "Scared", "Lonely", "Angry"]
-  },
-  {
-    "question": "😐😶😑",
-    "answer": "Indifferent",
-    "difficulty": "easy",
-    "hint": "Not reacting emotionally",
-    "options": ["Indifferent", "Sad", "Happy", "Annoyed"]
-  },
-  {
-    "question": "🤪😝😆",
-    "answer": "Crazy",
-    "difficulty": "easy",
-    "hint": "All over the place",
-    "options": ["Crazy", "Calm", "Serious", "Sleepy"]
-  },
-  {
-    "question": "🥳🎉😁",
-    "answer": "Excited",
-    "difficulty": "easy",
-    "hint": "Feeling festive",
-    "options": ["Excited", "Sad", "Confused", "Tired"]
-  },
+  { "question": "😊😁😄", "options": ["Happy", "Excited", "Content", "Cheerful"], "answer": "Happy", "hint": "Feeling good and smiling", "difficulty": "easy" },
+  { "question": "😢😭😿", "options": ["Sad", "Upset", "Disappointed", "Lonely"], "answer": "Sad", "hint": "Tears and sorrow", "difficulty": "easy" },
+  { "question": "😡🤬😠", "options": ["Angry", "Frustrated", "Annoyed", "Mad"], "answer": "Angry", "hint": "Burning with rage", "difficulty": "easy" },
+  { "question": "😴💤😪", "options": ["Sleepy", "Tired", "Exhausted", "Drowsy"], "answer": "Sleepy", "hint": "Time to rest", "difficulty": "easy" },
+  { "question": "😱😨😰", "options": ["Scared", "Worried", "Shocked", "Panicked"], "answer": "Scared", "hint": "Fear has taken over", "difficulty": "easy" },
+  { "question": "🤔💭🧐", "options": ["Thinking", "Wondering", "Curious", "Unsure"], "answer": "Thinking", "hint": "In deep thought", "difficulty": "easy" },
+  { "question": "😂🤣😹", "options": ["Laughing", "Amused", "Cheerful", "Giggling"], "answer": "Laughing", "hint": "It’s hilarious", "difficulty": "easy" },
+  { "question": "😐😑😶", "options": ["Neutral", "Bored", "Unimpressed", "Blank"], "answer": "Neutral", "hint": "No strong emotion", "difficulty": "easy" },
+  { "question": "😎🕶️🆒", "options": ["Cool", "Confident", "Stylish", "Relaxed"], "answer": "Cool", "hint": "Chillin’ with swagger", "difficulty": "easy" },
+  { "question": "😍❤️😘", "options": ["In love", "Affectionate", "Romantic", "Crushing"], "answer": "In love", "hint": "Heart-eyes mode", "difficulty": "easy" },
+  { "question": "😕😖🤷", "options": ["Confused", "Uncertain", "Puzzled", "Lost"], "answer": "Confused", "hint": "Not sure what's going on", "difficulty": "easy" },
+  { "question": "😳🙈😅", "options": ["Embarrassed", "Awkward", "Shy", "Uncomfortable"], "answer": "Embarrassed", "hint": "Caught off guard", "difficulty": "easy" },
+  { "question": "😤😣😠", "options": ["Frustrated", "Impatient", "Annoyed", "Stressed"], "answer": "Frustrated", "hint": "Blocked and boiling", "difficulty": "easy" },
+  { "question": "🥳🎉🎊", "options": ["Celebrating", "Excited", "Festive", "Joyful"], "answer": "Celebrating", "hint": "Party time!", "difficulty": "easy" },
+  { "question": "😞🙁☹️", "options": ["Disappointed", "Let down", "Discouraged", "Upset"], "answer": "Disappointed", "hint": "Didn’t go as hoped", "difficulty": "easy" },
+  { "question": "🤢🤮😷", "options": ["Sick", "Grossed out", "Disgusted", "Nauseous"], "answer": "Sick", "hint": "Not feeling well", "difficulty": "easy" },
+  { "question": "😇🙏🕊️", "options": ["Peaceful", "Good", "Blessed", "Innocent"], "answer": "Innocent", "hint": "Like an angel", "difficulty": "easy" },
+  { "question": "😬😳😓", "options": ["Awkward", "Nervous", "Shy", "Tense"], "answer": "Awkward", "hint": "That was uncomfortable", "difficulty": "easy" },
+  { "question": "🤗😊💞", "options": ["Warm", "Friendly", "Comforting", "Affectionate"], "answer": "Friendly", "hint": "Open and kind", "difficulty": "easy" },
+  { "question": "😔😟😕", "options": ["Down", "Worried", "Upset", "Unhappy"], "answer": "Upset", "hint": "Something’s bothering you", "difficulty": "easy" },
+  { "question": "😆😁🤣", "options": ["Laughing", "Joyful", "Entertained", "Happy"], "answer": "Laughing", "hint": "You can’t stop giggling", "difficulty": "easy" },
+  { "question": "🙄😒😑", "options": ["Annoyed", "Bored", "Unimpressed", "Tired"], "answer": "Annoyed", "hint": "So over it", "difficulty": "easy" },
+  { "question": "🥰😍😊", "options": ["Loving", "Flirty", "Grateful", "Adoring"], "answer": "Loving", "hint": "Feeling lots of affection", "difficulty": "easy" },
+  { "question": "😌🌸🧘", "options": ["Calm", "Relaxed", "Peaceful", "Chill"], "answer": "Calm", "hint": "Totally at ease", "difficulty": "easy" },
+  { "question": "😤💢👿", "options": ["Angry", "Annoyed", "Irritated", "Furious"], "answer": "Furious", "hint": "Beyond mad", "difficulty": "easy" },
+  { "question": "😟😰😥", "options": ["Worried", "Scared", "Stressed", "Anxious"], "answer": "Worried", "hint": "Too much on the mind", "difficulty": "easy" },
+  { "question": "🤩🥹😍", "options": ["Excited", "In love", "Admiring", "Starstruck"], "answer": "Starstruck", "hint": "In awe of someone", "difficulty": "easy" },
+  { "question": "😩😓😫", "options": ["Tired", "Exhausted", "Overwhelmed", "Worn out"], "answer": "Exhausted", "hint": "Running on empty", "difficulty": "easy" },
+  { "question": "😇😊🤍", "options": ["Kind", "Innocent", "Gentle", "Good"], "answer": "Kind", "hint": "Soft-hearted and caring", "difficulty": "easy" },
+  { "question": "🙃😜🤪", "options": ["Silly", "Goofy", "Playful", "Weird"], "answer": "Silly", "hint": "Acting not so serious", "difficulty": "easy" },
 
-  {
-    "question": "😤😠💨",
-    "answer": "Frustrated",
-    "difficulty": "easy",
-    "hint": "Something didn’t go as planned",
-    "options": ["Frustrated", "Happy", "Hungry", "Loving"]
-  },
-  {
-    "question": "🤤🍕🍟",
-    "answer": "Hungry",
-    "difficulty": "easy",
-    "hint": "Craving something tasty",
-    "options": ["Hungry", "Tired", "Joyful", "Angry"]
-  },
-  {
-    "question": "🤯🔥💣",
-    "answer": "Shocked",
-    "difficulty": "easy",
-    "hint": "Mind blown!",
-    "options": ["Shocked", "Excited", "Confused", "Sleepy"]
-  },
-  {
-    "question": "🤬💢👿",
-    "answer": "Furious",
-    "difficulty": "easy",
-    "hint": "Beyond angry",
-    "options": ["Furious", "Peaceful", "Tired", "Worried"]
-  },
-  {
-    "question": "🥺😥💧",
-    "answer": "Begging",
-    "difficulty": "easy",
-    "hint": "Asking with big eyes",
-    "options": ["Begging", "Grateful", "Afraid", "Disgusted"]
-  },
-  {
-    "question": "😖😣😫",
-    "answer": "Exhausted",
-    "difficulty": "easy",
-    "hint": "Just can't take it anymore",
-    "options": ["Exhausted", "Excited", "Joyful", "Playful"]
-  },
-  {
-    "question": "🤧😷🤒",
-    "answer": "Sick",
-    "difficulty": "easy",
-    "hint": "Not feeling well",
-    "options": ["Sick", "Lazy", "Annoyed", "Scared"]
-  },
-  {
-    "question": "😬😓😟",
-    "answer": "Nervous",
-    "difficulty": "easy",
-    "hint": "Before a big test or performance",
-    "options": ["Nervous", "Happy", "Lazy", "Excited"]
-  },
-  {
-    "question": "😕🤷‍♂️😐",
-    "answer": "Confused",
-    "difficulty": "easy",
-    "hint": "No idea what’s going on",
-    "options": ["Confused", "Focused", "Sad", "Tired"]
-  },
-  {
-    "question": "😔📉🙁",
-    "answer": "Disappointed",
-    "difficulty": "easy",
-    "hint": "Expectations were not met",
-    "options": ["Disappointed", "Happy", "Surprised", "Confused"]
-  },
-  {
-    "question": "😟😰🌀",
-    "answer": "Anxious",
-    "difficulty": "medium",
-    "hint": "Worried with a racing mind",
-    "options": ["Anxious", "Angry", "Excited", "Tired"]
-  },
-  {
-    "question": "😕😵🫤",
-    "answer": "Conflicted",
-    "difficulty": "medium",
-    "hint": "Mixed feelings",
-    "options": ["Conflicted", "Joyful", "Lonely", "Nervous"]
-  },
-  {
-    "question": "😶‍🌫️🤯🌀",
-    "answer": "Overwhelmed",
-    "difficulty": "medium",
-    "hint": "Too much at once",
-    "options": ["Overwhelmed", "Excited", "Relaxed", "Focused"]
-  },
-  {
-    "question": "😒🙄😑",
-    "answer": "Annoyed",
-    "difficulty": "medium",
-    "hint": "Bothered by someone or something",
-    "options": ["Annoyed", "Confused", "Happy", "Curious"]
-  },
-  {
-    "question": "🤐🙊🔒",
-    "answer": "Secretive",
-    "difficulty": "medium",
-    "hint": "Not sharing thoughts",
-    "options": ["Secretive", "Talkative", "Excited", "Shy"]
-  },
-  {
-    "question": "🥴😵‍💫😓",
-    "answer": "Dizzy",
-    "difficulty": "medium",
-    "hint": "Head spinning",
-    "options": ["Dizzy", "Tired", "Angry", "Sick"]
-  },
-  {
-    "question": "😤🙃🤬",
-    "answer": "Irritated",
-    "difficulty": "medium",
-    "hint": "Peeved but not furious",
-    "options": ["Irritated", "Sad", "Afraid", "Excited"]
-  },
-  {
-    "question": "😓😰🤯",
-    "answer": "Stressed",
-    "difficulty": "medium",
-    "hint": "So many deadlines",
-    "options": ["Stressed", "Lazy", "Peaceful", "Proud"]
-  },
-  {
-    "question": "😶😔🫥",
-    "answer": "Withdrawn",
-    "difficulty": "medium",
-    "hint": "Emotionally distant",
-    "options": ["Withdrawn", "Happy", "Angry", "Focused"]
-  },
-  {
-    "question": "😵🫣😧",
-    "answer": "Panicked",
-    "difficulty": "medium",
-    "hint": "Lost control in a moment",
-    "options": ["Panicked", "Excited", "Relieved", "Energetic"]
-  },
-  {
-    "question": "🥹😭😩",
-    "answer": "Devastated",
-    "difficulty": "medium",
-    "hint": "Dealing with deep loss",
-    "options": ["Devastated", "Frustrated", "Tired", "Playful"]
-  },
-  {
-    "question": "😶‍🌫️🫠🤐",
-    "answer": "Numb",
-    "difficulty": "medium",
-    "hint": "Emotionally shut down",
-    "options": ["Numb", "Happy", "Afraid", "Shy"]
-  },
-  {
-    "question": "😫😣😤",
-    "answer": "Fed up",
-    "difficulty": "medium",
-    "hint": "At the breaking point",
-    "options": ["Fed up", "Happy", "Tired", "Peaceful"]
-  },
-  {
-    "question": "🤩😍🫶",
-    "answer": "Admiring",
-    "difficulty": "medium",
-    "hint": "Looking up to someone",
-    "options": ["Admiring", "Loving", "Sad", "Lonely"]
-  },
-  {
-    "question": "😮😲🙀",
-    "answer": "Amazed",
-    "difficulty": "medium",
-    "hint": "In awe",
-    "options": ["Amazed", "Confused", "Tired", "Excited"]
-  },
-  {
-    "question": "🫥😶🫤",
-    "answer": "Blank",
-    "difficulty": "medium",
-    "hint": "No expression at all",
-    "options": ["Blank", "Worried", "Joyful", "Silly"]
-  },
-  {
-    "question": "🫤😐😒",
-    "answer": "Unimpressed",
-    "difficulty": "medium",
-    "hint": "That’s it?",
-    "options": ["Unimpressed", "Excited", "Confused", "Angry"]
-  },
-  {
-    "question": "😞💔😩",
-    "answer": "Heartbroken",
-    "difficulty": "medium",
-    "hint": "Love lost",
-    "options": ["Heartbroken", "Happy", "Frustrated", "Afraid"]
-  },
-  {
-    "question": "🫣🙈😰",
-    "answer": "Embarrassed",
-    "difficulty": "medium",
-    "hint": "Cringe moment",
-    "options": ["Embarrassed", "Excited", "Grateful", "Playful"]
-  },
-  {
-    "question": "😬🫤😑",
-    "answer": "Uncomfortable",
-    "difficulty": "medium",
-    "hint": "Awkward situation",
-    "options": ["Uncomfortable", "Relaxed", "Angry", "Excited"]
-  },
-  {
-    "question": "🥴🤕🫥",
-    "answer": "Unwell",
-    "difficulty": "medium",
-    "hint": "Not quite sick, just off",
-    "options": ["Unwell", "Tired", "Playful", "Happy"]
-  },
-  {
-    "question": "😕🫤🫣",
-    "answer": "Uncertain",
-    "difficulty": "medium",
-    "hint": "Not sure what to do",
-    "options": ["Uncertain", "Sad", "Tired", "Focused"]
-  },
-  {
-    "question": "🫡😌🎖️",
-    "answer": "Proud",
-    "difficulty": "medium",
-    "hint": "Mission accomplished",
-    "options": ["Proud", "Embarrassed", "Scared", "Annoyed"]
-  },
-  {
-    "question": "🤔🧠💭",
-    "answer": "Pensive",
-    "difficulty": "medium",
-    "hint": "Thoughtful but serious",
-    "options": ["Pensive", "Happy", "Dizzy", "Tired"]
-  },
-  {
-    "question": "🤨😏🧐",
-    "answer": "Skeptical",
-    "difficulty": "medium",
-    "hint": "Not easily convinced",
-    "options": ["Skeptical", "Confused", "Excited", "Happy"]
-  },
-  {
-    "question": "😟🙁😢",
-    "answer": "Regretful",
-    "difficulty": "medium",
-    "hint": "Shouldn’t have done that",
-    "options": ["Regretful", "Joyful", "Frustrated", "Tired"]
-  },
-  {
-    "question": "🫂🫶🤗",
-    "answer": "Affectionate",
-    "difficulty": "medium",
-    "hint": "Very warm and caring",
-    "options": ["Affectionate", "Angry", "Tired", "Sad"]
-  },
-  {
-    "question": "🫨😨🥶",
-    "answer": "Terrified",
-    "difficulty": "medium",
-    "hint": "Frozen in fear",
-    "options": ["Terrified", "Surprised", "Confused", "Playful"]
-  },
-  {
-    "question": "😖😓😤",
-    "answer": "Disheartened",
-    "difficulty": "medium",
-    "hint": "Lost motivation",
-    "options": ["Disheartened", "Excited", "Happy", "Shy"]
-  },
-  {
-    "question": "😬🫣🤦‍♀️",
-    "answer": "Cringey",
-    "difficulty": "medium",
-    "hint": "Oh no, secondhand embarrassment",
-    "options": ["Cringey", "Confused", "Frustrated", "Excited"]
-  },
-  {
-    "question": "🫥🧍‍♂️🌫️",
-    "answer": "Dissociated",
-    "difficulty": "hard",
-    "hint": "Detached from reality",
-    "options": ["Dissociated", "Bored", "Relaxed", "Excited"]
-  },
-  {
-    "question": "😐📉🫤",
-    "answer": "Disillusioned",
-    "difficulty": "hard",
-    "hint": "Let down by expectations",
-    "options": ["Disillusioned", "Sad", "Frustrated", "Angry"]
-  },
-  {
-    "question": "😩🎭🫣",
-    "answer": "Emotionally Exhausted",
-    "difficulty": "hard",
-    "hint": "Too tired to pretend anymore",
-    "options": ["Emotionally Exhausted", "Tired", "Anxious", "Numb"]
-  },
-  {
-    "question": "🥶🫣🌪️",
-    "answer": "Paralyzed by Fear",
-    "difficulty": "hard",
-    "hint": "Too scared to move",
-    "options": ["Paralyzed by Fear", "Confused", "Surprised", "Excited"]
-  },
-  {
-    "question": "😖🎭🙃",
-    "answer": "Masking Pain",
-    "difficulty": "hard",
-    "hint": "Pretending everything is fine",
-    "options": ["Masking Pain", "Excited", "Playful", "Loving"]
-  },
-  {
-    "question": "🫣🧠📉",
-    "answer": "Insecure",
-    "difficulty": "hard",
-    "hint": "Doubt in self-worth",
-    "options": ["Insecure", "Proud", "Grateful", "Energetic"]
-  },
-  {
-    "question": "🫥🛑🫣",
-    "answer": "Ashamed",
-    "difficulty": "hard",
-    "hint": "Avoiding eye contact",
-    "options": ["Ashamed", "Happy", "Sad", "Excited"]
-  },
-  {
-    "question": "🪫😶🫥",
-    "answer": "Burnt Out",
-    "difficulty": "hard",
-    "hint": "Empty and drained",
-    "options": ["Burnt Out", "Frustrated", "Calm", "Angry"]
-  },
-  {
-    "question": "🎭🧍‍♀️🫣",
-    "answer": "Self-Conscious",
-    "difficulty": "hard",
-    "hint": "All eyes on me...?",
-    "options": ["Self-Conscious", "Excited", "Shy", "Afraid"]
-  },
-  {
-    "question": "😐😶‍🌫️🔁",
-    "answer": "Apathetic",
-    "difficulty": "hard",
-    "hint": "Feeling nothing at all",
-    "options": ["Apathetic", "Angry", "Joyful", "Nervous"]
-  },
-  {
-    "question": "😩🔒😶",
-    "answer": "Repressed",
-    "difficulty": "hard",
-    "hint": "Bottling it all up",
-    "options": ["Repressed", "Angry", "Worried", "Relaxed"]
-  },
-  {
-    "question": "😵‍💫🔄🌀",
-    "answer": "Confounded",
-    "difficulty": "hard",
-    "hint": "Utterly baffled",
-    "options": ["Confounded", "Excited", "Dizzy", "Playful"]
-  },
-  {
-    "question": "🙃💬🚫",
-    "answer": "Dismissed",
-    "difficulty": "hard",
-    "hint": "Ignored or brushed off",
-    "options": ["Dismissed", "Heard", "Respected", "Included"]
-  },
-  {
-    "question": "😰🫥🌘",
-    "answer": "Despairing",
-    "difficulty": "hard",
-    "hint": "No light at the end of the tunnel",
-    "options": ["Despairing", "Anxious", "Hopeful", "Frustrated"]
-  },
-  {
-    "question": "😒🧏‍♀️📢",
-    "answer": "Annoyed by Noise",
-    "difficulty": "hard",
-    "hint": "Too much going on",
-    "options": ["Annoyed by Noise", "Playful", "Afraid", "Happy"]
-  },
-  {
-    "question": "🫨🧠🪫",
-    "answer": "Mentally Drained",
-    "difficulty": "hard",
-    "hint": "Mind is out of battery",
-    "options": ["Mentally Drained", "Energetic", "Curious", "Excited"]
-  },
-  {
-    "question": "🫠🙃😶",
-    "answer": "Emotionally Numb",
-    "difficulty": "hard",
-    "hint": "No joy, no sadness, just nothing",
-    "options": ["Emotionally Numb", "Tired", "Angry", "Shy"]
-  },
-  {
-    "question": "😶🪞🫣",
-    "answer": "Ashamed of Self",
-    "difficulty": "hard",
-    "hint": "Can’t look in the mirror",
-    "options": ["Ashamed of Self", "Proud", "Confident", "Peaceful"]
-  },
-  {
-    "question": "🫣😳🕳️",
-    "answer": "Wanting to Disappear",
-    "difficulty": "hard",
-    "hint": "Wishing the floor would open",
-    "options": ["Wanting to Disappear", "Angry", "Excited", "Surprised"]
-  },
-  {
-    "question": "😑⚡💣",
-    "answer": "Suppressing Anger",
-    "difficulty": "hard",
-    "hint": "Holding back an outburst",
-    "options": ["Suppressing Anger", "Calm", "Excited", "Tired"]
-  },
-  {
-    "question": "💢🧍‍♂️😶",
-    "answer": "Bottled Rage",
-    "difficulty": "hard",
-    "hint": "Not showing how mad you are",
-    "options": ["Bottled Rage", "Happy", "Bored", "Confused"]
-  },
-  {
-    "question": "😵‍💫📆🕒",
-    "answer": "Chronically Overwhelmed",
-    "difficulty": "hard",
-    "hint": "Always out of time",
-    "options": ["Chronically Overwhelmed", "Focused", "Curious", "Energized"]
-  },
-  {
-    "question": "🫥😞🧍‍♀️",
-    "answer": "Neglected",
-    "difficulty": "hard",
-    "hint": "Felt forgotten",
-    "options": ["Neglected", "Proud", "Joyful", "Excited"]
-  },
-  {
-    "question": "😰🫣💭",
-    "answer": "Social Anxiety",
-    "difficulty": "hard",
-    "hint": "Fear of being judged",
-    "options": ["Social Anxiety", "Excited", "Curious", "Peaceful"]
-  },
-  {
-    "question": "😟🧍‍♂️🧍‍♂️🗯️",
-    "answer": "Peer Pressure",
-    "difficulty": "hard",
-    "hint": "Trying to fit in",
-    "options": ["Peer Pressure", "Calm", "Excited", "Angry"]
-  },
-  {
-    "question": "😖🔁🎭",
-    "answer": "Exhausted from Pretending",
-    "difficulty": "hard",
-    "hint": "Always putting on a face",
-    "options": ["Exhausted from Pretending", "Happy", "Tired", "Lonely"]
-  },
-  {
-    "question": "🥲😶🎭",
-    "answer": "Smiling Through Pain",
-    "difficulty": "hard",
-    "hint": "Fake smile, real pain",
-    "options": ["Smiling Through Pain", "Happy", "Excited", "Embarrassed"]
-  },
-  {
-    "question": "🫥🤐🧠",
-    "answer": "Internalized",
-    "difficulty": "hard",
-    "hint": "Everything kept inside",
-    "options": ["Internalized", "Talkative", "Proud", "Energetic"]
-  },
-  {
-    "question": "😞💭📉",
-    "answer": "Hopeless",
-    "difficulty": "hard",
-    "hint": "Giving up slowly",
-    "options": ["Hopeless", "Excited", "Motivated", "Content"]
-  },
-  {
-    "question": "😣⏳📆",
-    "answer": "Dragging On",
-    "difficulty": "hard",
-    "hint": "Each day feels endless",
-    "options": ["Dragging On", "Energized", "Grateful", "Excited"]
-  }
+  { "question": "🤨🧐👀", "options": ["Skeptical", "Curious", "Judging", "Interested"], "answer": "Skeptical", "hint": "Not easily convinced", "difficulty": "hard" },
+  { "question": "😟😰🤯", "options": ["Anxious", "Worried", "Panicked", "Overwhelmed"], "answer": "Anxious", "hint": "Future-focused fear", "difficulty": "hard" },
+  { "question": "😑😐🙄", "options": ["Indifferent", "Bored", "Unimpressed", "Passive"], "answer": "Indifferent", "hint": "You just don't care", "difficulty": "hard" },
+  { "question": "🤥🙃😏", "options": ["Dishonest", "Sneaky", "Tricky", "Lying"], "answer": "Dishonest", "hint": "Not telling the truth", "difficulty": "hard" },
+  { "question": "😬😳🫣", "options": ["Embarrassed", "Ashamed", "Cringy", "Guilty"], "answer": "Embarrassed", "hint": "Felt exposed", "difficulty": "hard" },
+  { "question": "😒😓😖", "options": ["Displeased", "Annoyed", "Resigned", "Discouraged"], "answer": "Discouraged", "hint": "Losing motivation", "difficulty": "hard" },
+  { "question": "😕🤷‍♀️😵‍💫", "options": ["Confused", "Disoriented", "Uncertain", "Lost"], "answer": "Uncertain", "hint": "No clear direction", "difficulty": "hard" },
+  { "question": "🤗😌💞", "options": ["Comforted", "Reassured", "Safe", "Loved"], "answer": "Comforted", "hint": "Feeling soothed", "difficulty": "hard" },
+  { "question": "🫤😶😐", "options": ["Meh", "Numb", "Flat", "Unmoved"], "answer": "Numb", "hint": "Emotionally shut down", "difficulty": "hard" },
+  { "question": "🤯😧😳", "options": ["Shocked", "Stunned", "Speechless", "Mindblown"], "answer": "Mindblown", "hint": "Can’t believe it", "difficulty": "hard" },
+  { "question": "😤🙄😒", "options": ["Irritated", "Dismissive", "Triggered", "Offended"], "answer": "Irritated", "hint": "Bothered but not furious", "difficulty": "hard" },
+  { "question": "😇🤍✨", "options": ["Pure", "Good", "Innocent", "Kind"], "answer": "Innocent", "hint": "Blameless and simple", "difficulty": "hard" },
+  { "question": "😖😣😫", "options": ["Struggling", "Frustrated", "Hopeless", "Agonized"], "answer": "Struggling", "hint": "Trying, but hard", "difficulty": "hard" },
+  { "question": "🥺😢🫶", "options": ["Longing", "Sad", "Yearning", "Needy"], "answer": "Longing", "hint": "Really missing something", "difficulty": "hard" },
+  { "question": "🫣😶‍🌫️😳", "options": ["Ashamed", "Shy", "Embarrassed", "Self-conscious"], "answer": "Ashamed", "hint": "You feel you’ve done wrong", "difficulty": "hard" },
+  { "question": "😟🥲😕", "options": ["Disappointed", "Regretful", "Bothered", "Upset"], "answer": "Regretful", "hint": "Wishing you hadn’t", "difficulty": "hard" },
+  { "question": "🫢😦😨", "options": ["Alarmed", "Scared", "Shocked", "Uneasy"], "answer": "Alarmed", "hint": "Something feels off", "difficulty": "hard" },
+  { "question": "😤😮‍💨😐", "options": ["Resigned", "Tired", "Irritated", "Frustrated"], "answer": "Resigned", "hint": "Giving in quietly", "difficulty": "hard" },
+  { "question": "🤧🥴😓", "options": ["Sick", "Weary", "Burnt out", "Fatigued"], "answer": "Fatigued", "hint": "Long-term tiredness", "difficulty": "hard" },
+  { "question": "🤫😶🫥", "options": ["Silent", "Hidden", "Withdrawn", "Muted"], "answer": "Withdrawn", "hint": "Pulling away emotionally", "difficulty": "hard" },
+  { "question": "😠😡😠", "options": ["Irritated", "Upset", "Bitter", "Hostile"], "answer": "Bitter", "hint": "Anger mixed with hurt", "difficulty": "hard" },
+  { "question": "😩😫😔", "options": ["Overwhelmed", "Tired", "Frustrated", "Defeated"], "answer": "Overwhelmed", "hint": "Too much happening at once", "difficulty": "hard" },
+  { "question": "😕😖😢", "options": ["Conflicted", "Troubled", "Mixed", "Guilty"], "answer": "Conflicted", "hint": "Pulled in different directions", "difficulty": "hard" },
+  { "question": "😟😧🥺", "options": ["Concerned", "Sad", "Empathetic", "Panicked"], "answer": "Concerned", "hint": "Worried for someone", "difficulty": "hard" },
+  { "question": "😳😨😱", "options": ["Panicked", "Terrified", "Startled", "Frightened"], "answer": "Startled", "hint": "Jump scare vibes", "difficulty": "hard" },
+  { "question": "😬😔🫣", "options": ["Nervous", "Anxious", "Shy", "Self-conscious"], "answer": "Self-conscious", "hint": "Too aware of yourself", "difficulty": "hard" },
+  { "question": "😓😩🤧", "options": ["Exhausted", "Tired", "Worn out", "Burnt out"], "answer": "Burnt out", "hint": "More than just tired", "difficulty": "hard" },
+  { "question": "😒😡🫤", "options": ["Annoyed", "Displeased", "Judgmental", "Critical"], "answer": "Critical", "hint": "Quick to find fault", "difficulty": "hard" },
+  { "question": "😶‍🌫️😵‍💫😔", "options": ["Hopeless", "Confused", "Empty", "Lost"], "answer": "Hopeless", "hint": "Seeing no way out", "difficulty": "hard" },
+  { "question": "😰😱🥶", "options": ["Fearful", "Terrified", "Panicked", "Scared"], "answer": "Terrified", "hint": "Deep fear", "difficulty": "hard" },
 
+  { "question": "😶‍🌫️🫥😔", "answer": "Empty", "difficulty": "medium", "hint": "Feeling hollow inside", "options": ["Empty", "Detached", "Resigned", "Hopeless"] },
+  { "question": "🫣😳😓", "answer": "Exposed", "difficulty": "medium", "hint": "Seen in a vulnerable way", "options": ["Ashamed", "Self-conscious", "Embarrassed", "Exposed"] },
+  { "question": "😠😤🧨", "answer": "Enraged", "difficulty": "medium", "hint": "More than just mad", "options": ["Furious", "Enraged", "Explosive", "Irritated"] },
+  { "question": "😟🤲🥺", "answer": "Vulnerable", "difficulty": "medium", "hint": "Open to hurt", "options": ["Insecure", "Worried", "Vulnerable", "Dependent"] },
+  { "question": "😐😑🫤", "answer": "Apathetic", "difficulty": "medium", "hint": "Lost all motivation", "options": ["Apathetic", "Indifferent", "Flat", "Withdrawn"] },
+  { "question": "😵‍💫🫠🤯", "answer": "Disoriented", "difficulty": "medium", "hint": "Don’t know where you are—mentally", "options": ["Overwhelmed", "Defeated", "Disoriented", "Collapsed"] },
+  { "question": "🫥😔😶", "answer": "Invisible", "difficulty": "medium", "hint": "Feel like you don’t exist", "options": ["Invisible", "Ignored", "Hidden", "Silent"] },
+  { "question": "🥺😞💔", "answer": "Abandoned", "difficulty": "medium", "hint": "Left without care", "options": ["Yearning", "Broken", "Neglected", "Abandoned"] },
+  { "question": "🫣😔😳", "answer": "Flawed", "difficulty": "medium", "hint": "Deep self-judgment", "options": ["Ashamed", "Guilty", "Flawed", "Unworthy"] },
+  { "question": "😠😡😤", "answer": "Resentful", "difficulty": "medium", "hint": "Long-term grudge", "options": ["Bitter", "Resentful", "Furious", "Annoyed"] },
+  { "question": "😶‍🌫️😔💤", "answer": "Disconnected", "difficulty": "medium", "hint": "Not tuned into life", "options": ["Numb", "Empty", "Drained", "Disconnected"] },
+  { "question": "😭😩🖤", "answer": "Devastated", "difficulty": "medium", "hint": "Emotionally shattered", "options": ["Broken", "Devastated", "Crushed", "Grieving"] },
+  { "question": "😞😒😩", "answer": "Defeated", "difficulty": "medium", "hint": "Tried and gave up", "options": ["Hopeless", "Defeated", "Rejected", "Lost"] },
+  { "question": "😣🫣🙈", "answer": "Ashamed", "difficulty": "medium", "hint": "Feeling morally wrong", "options": ["Ashamed", "Regretful", "Embarrassed", "Exposed"] },
+  { "question": "😵‍💫🥴🤯", "answer": "Dazed", "difficulty": "medium", "hint": "Mentally spun around", "options": ["Overwhelmed", "Dazed", "Unsettled", "Anxious"] },
+  { "question": "😐🫤😶‍🌫️", "answer": "Detached", "difficulty": "medium", "hint": "Emotionally checked out", "options": ["Detached", "Numb", "Bored", "Confused"] },
+  { "question": "🥺🙁💭", "answer": "Isolated", "difficulty": "medium", "hint": "No connection around", "options": ["Lonely", "Isolated", "Neglected", "Unseen"] },
+  { "question": "😤🤬💢", "answer": "Hostile", "difficulty": "medium", "hint": "Openly combative", "options": ["Angry", "Aggressive", "Irritated", "Hostile"] },
+  { "question": "😩😔🫥", "answer": "Drained", "difficulty": "medium", "hint": "No energy left", "options": ["Exhausted", "Hopeless", "Drained", "Burned"] },
+  { "question": "😨😰🫨", "answer": "Dreadful", "difficulty": "medium", "hint": "Expecting something bad", "options": ["Panicked", "Frightened", "Dreadful", "Alarmed"] },
+  { "question": "😟😣🤲", "answer": "Insecure", "difficulty": "medium", "hint": "Doubting your worth", "options": ["Needy", "Vulnerable", "Anxious", "Insecure"] },
+  { "question": "😢💭🙁", "answer": "Neglected", "difficulty": "medium", "hint": "Uncared for", "options": ["Lonely", "Sad", "Disconnected", "Neglected"] },
+  { "question": "😮‍💨😔😶", "answer": "Resigned", "difficulty": "medium", "hint": "Stopped fighting it", "options": ["Exhausted", "Hopeless", "Resigned", "Fatigued"] },
+  { "question": "😞💔😓", "answer": "Rejected", "difficulty": "medium", "hint": "Not accepted", "options": ["Rejected", "Heartbroken", "Abandoned", "Unloved"] },
+  { "question": "😟🥹🙁", "answer": "Unworthy", "difficulty": "medium", "hint": "Not feeling good enough", "options": ["Hurt", "Sensitive", "Unworthy", "Worried"] },
+  { "question": "😕😖😶‍🌫️", "answer": "Conflicted", "difficulty": "medium", "hint": "Pulled between feelings", "options": ["Conflicted", "Guilty", "Ashamed", "Confused"] },
+  { "question": "😢💔😟", "answer": "Grieving", "difficulty": "medium", "hint": "Processing loss", "options": ["Grieving", "Abandoned", "Wounded", "Broken"] },
+  { "question": "🥲😔😶", "answer": "Melancholy", "difficulty": "medium", "hint": "Soft sadness", "options": ["Hopeless", "Empty", "Melancholy", "Lonely"] },
+  { "question": "😤😠🧱", "answer": "Guarded", "difficulty": "medium", "hint": "Hard to let in", "options": ["Guarded", "Triggered", "Annoyed", "Tense"] },
+  { "question": "🥺💔😖", "answer": "Fragile", "difficulty": "medium", "hint": "Easily hurt", "options": ["Sensitive", "Broken", "Fragile", "Shattered"] }
 ]
