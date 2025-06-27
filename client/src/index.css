@@ -98,3 +98,21 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--muted);
 }
 
+@keyframes moveBg {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.bg-emoji-animate {
+  background-image: url('/emoji-pattern.png');
+  background-repeat: repeat;
+  background-size: 150px;
+  animation: moveBg 40s linear infinite;
+}

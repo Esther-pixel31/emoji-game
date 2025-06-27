@@ -1,42 +1,77 @@
+import { motion } from "framer-motion";
+import emojiPattern from "../assets/emoji-pattern.png"; // Adjust if needed
+
 export default function About() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-20 space-y-12">
-      <div>
-        <h2 className="text-4xl font-bold mb-4 tracking-tight">About Emoji Quiz Master</h2>
-        <p className="text-lg leading-relaxed text-muted">
-          Emoji Quiz Master is a free, fun, and interactive quiz game designed for emoji lovers of all ages! The game challenges players to decode clever emoji clues in four exciting categories—Movie Characters, Emotion Quiz, Marvel Heroes, and Guess the Song. Whether you’re playing solo or with friends, it’s a perfect way to test your emoji IQ.
-        </p>
-      </div>
+    <section
+      className="relative px-6 py-20 min-h-screen"
+      style={{
+        backgroundImage: `url(${emojiPattern})`,
+        backgroundRepeat: "repeat",
+        backgroundSize: "150px",
+      }}
+    >
+      {/* Overlay that adapts to light/dark mode */}
+      <div className="absolute inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-sm"></div>
 
-      <div>
-        <h3 className="text-2xl font-semibold mb-2 tracking-tight">🎯 Key Features</h3>
-        <ul className="list-disc list-inside space-y-2 text-muted leading-relaxed">
-          <li>🎭 Emoji-based puzzles across 4 unique genres</li>
-          <li>🌓 Theme toggle with light and dark modes</li>
-          <li>⚡ Smooth animations and responsive design</li>
-          <li>📱 Fully mobile and desktop optimized</li>
-        </ul>
-      </div>
+      <div className="relative z-10 max-w-4xl mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-8 space-y-12 text-left">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2 className="text-4xl font-bold mb-4 tracking-tight">🧐 About Emoji Quiz Master</h2>
+          <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+            Emoji Quiz Master is a free, fun, and interactive quiz game designed for emoji lovers of all ages! Decode clever emoji clues in four exciting categories — Movie Characters, Emotion Quiz, Marvel Heroes, and Guess the Song. Perfect for playing solo or with friends!
+          </p>
+        </motion.div>
 
-      <div>
-        <h3 className="text-2xl font-semibold mb-2 tracking-tight">🛠️ Built With</h3>
-        <p className="text-muted leading-relaxed">
-          This app is developed using modern frontend technologies including <strong>React</strong> for UI rendering, <strong>Tailwind CSS</strong> for styling, and <strong>React Router</strong> for navigation. It's a modular and scalable foundation ready for more features.
-        </p>
-      </div>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <h3 className="text-2xl font-semibold mb-2 tracking-tight">🎯 Key Features</h3>
+          <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>🎭 Emoji-based puzzles across 4 unique genres</li>
+            <li>🌓 Theme toggle with light and dark modes</li>
+            <li>⚡ Smooth animations and responsive design</li>
+            <li>📱 Fully mobile and desktop optimized</li>
+          </ul>
+        </motion.div>
 
-      <div>
-        <h3 className="text-2xl font-semibold mb-2 tracking-tight">🚀 Future Vision</h3>
-        <p className="text-muted leading-relaxed">
-          We plan to add user profiles, multiplayer challenges, leaderboards, and custom quiz creation tools. Stay tuned for even more emoji fun!
-        </p>
-      </div>
+        <motion.div
+          initial={{ x: -30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+        >
+          <h3 className="text-2xl font-semibold mb-2 tracking-tight">🛠️ Built With</h3>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            This app is developed using <strong>React</strong>, <strong>Tailwind CSS</strong>, and <strong>React Router</strong>. It’s modular and scalable — ready for new features!
+          </p>
+        </motion.div>
 
-      <div>
-        <h3 className="text-2xl font-semibold mb-2 tracking-tight">👩‍💻 Developer Credits</h3>
-        <p className="text-muted leading-relaxed">
-          Made with ❤️ by <strong>Esther Mutua</strong>. Contributions, feedback, and ideas are always welcome!
-        </p>
+        <motion.div
+          initial={{ x: 30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+        >
+          <h3 className="text-2xl font-semibold mb-2 tracking-tight">🚀 Future Vision</h3>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            We plan to add user profiles, multiplayer challenges, leaderboards, and custom quiz creation tools. Stay tuned for even more emoji fun!
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.8 }}
+        >
+          <h3 className="text-2xl font-semibold mb-2 tracking-tight">👩‍💻 Developer Credits</h3>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            Made with ❤️ by <strong>Esther Mutua</strong>. Contributions, feedback, and ideas are always welcome!
+          </p>
+        </motion.div>
       </div>
     </section>
   );

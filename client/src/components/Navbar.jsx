@@ -1,10 +1,13 @@
 import ProfileMenu from './ProfileMenu';
 import { Link } from 'react-router-dom';
+import emojiPattern from '../assets/emoji-pattern.png';
+
 
 export default function Navbar({ darkMode, setDarkMode }) {
   return (
-    <nav className="flex justify-between items-center px-6 py-4 bg-nav text-nav-text shadow">
-  {/* Left side: Logo + toggle */}
+   <nav
+  className="flex justify-between items-center px-6 py-4 bg-transparent text-nav-text shadow absolute top-0 left-0 w-full z-20"
+>
   <div className="flex items-center gap-4">
     <button
       onClick={() => setDarkMode(!darkMode)}
@@ -13,11 +16,10 @@ export default function Navbar({ darkMode, setDarkMode }) {
       {darkMode ? '☀️' : '🌙'}
     </button>
     <Link to="/" className="text-2xl font-bold hover:opacity-80 transition duration-200">
-    Emoji Quiz 
-  </Link>
+      Emoji Quiz
+    </Link>
   </div>
 
-  {/* Right side: Links + Profile */}
   <div className="flex items-center gap-6 text-sm sm:text-base">
     <a href="/" className="hover:text-primary transition">Home</a>
     <a href="/about" className="hover:text-primary transition">About</a>
@@ -25,6 +27,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
     <ProfileMenu />
   </div>
 </nav>
+
 
   );
 }

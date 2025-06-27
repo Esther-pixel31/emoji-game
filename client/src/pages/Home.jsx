@@ -1,6 +1,8 @@
 import GenreCard from '../components/GenreCard';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import emojiPattern from '../assets/emoji-pattern.png';
+
 
 const genres = [
   { emoji: '🎬', title: 'Movie Characters', description: 'Guess the film icons' },
@@ -17,26 +19,34 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative bg-hero-gradient py-16 text-center flex flex-col items-center">
-        <h1 className="text-5xl font-extrabold mb-4 animate-bounce">
-          🎉 Emoji Quiz Master 🎉
-        </h1>
+      <section
+  className="relative overflow-hidden py-16 text-center flex flex-col items-center"
+  style={{
+    backgroundImage: `url(${emojiPattern})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: '150px',
+    animation: 'moveBg 40s linear infinite',
+  }}
+>
+  <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+  <h1 className="pt-24 text-5xl font-extrabold mb-4 animate-bounce relative z-10">
+  🎉 Emoji Quiz Master 🎉
+</h1>
+<p className="text-xl max-w-xl mx-auto text-muted relative z-10">
+  Challenge yourself with fun emoji-based quizzes across 4 genres. Fast, funny, and family-friendly!
+</p>
 
-        <p className="text-xl max-w-xl mx-auto text-muted">
-          Challenge yourself with fun emoji-based quizzes across 4 genres. Fast, funny, and family-friendly!
-        </p>
+  <motion.div
+    onClick={scrollToGenres}
+    className="mt-10 cursor-pointer text-primary relative z-10"
+    animate={{ y: [0, 10, 0] }}
+    transition={{ repeat: Infinity, duration: 1.5 }}
+    whileHover={{ scale: 1.2 }}
+  >
+    <ChevronDown size={36} strokeWidth={2.5} />
+  </motion.div>
+</section>
 
-        {/* Animated arrow */}
-        <motion.div
-          onClick={scrollToGenres}
-          className="mt-10 cursor-pointer text-primary"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          whileHover={{ scale: 1.2 }}
-        >
-          <ChevronDown size={36} strokeWidth={2.5} />
-        </motion.div>
-      </section>
 
       <section id="genre-section" className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold mb-8 text-center">Choose a Genre</h2>
