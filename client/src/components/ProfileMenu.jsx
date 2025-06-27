@@ -1,26 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FaUserCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
 export default function ProfileMenu() {
   const { user, login, logout } = useAuth();
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ email: '', password: '', username: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [tab, setTab] = useState('login');
-  const [loading, setLoading] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const dropdownRef = useRef();
   const [leaderboard, setLeaderboard] = useState([]);
 
-  // Close dropdown on outside click or Escape
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') setShowModal(false);
-    };
+    const handleEscape = (e) => e.key === 'Escape' && setShowModal(false);
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpenMenu(false);
@@ -43,26 +40,21 @@ export default function ProfileMenu() {
     }
   }, [openMenu, user]);
 
-  const handleSubmit = async () => {
-    const endpoint = tab === 'register' ? '/api/register' : '/api/login';
-    const payload = {
-      email: form.email.trim(),
-      password: form.password,
-      ...(tab === 'register' && { username: form.username.trim() }),
-    };
+  const schema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().min(6, 'Min 6 chars').required('Required'),
+    username: tab === 'register' ? Yup.string().required('Required') : Yup.string(),
+  });
 
-    if (!payload.email || !payload.password || (tab === 'register' && !payload.username)) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    const endpoint = tab === 'register' ? '/api/register' : '/api/login';
 
     try {
-      setLoading(true);
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(values),
       });
 
       const data = await res.json();
@@ -70,29 +62,29 @@ export default function ProfileMenu() {
 
       await login();
       toast.success(tab === 'login' ? `Welcome back, ${data.user?.username || 'User'}!` : 'Account created 🎉');
-      setForm({ email: '', password: '', username: '' });
+      resetForm();
       setShowModal(false);
     } catch (err) {
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') handleSubmit();
   };
 
   return (
     <>
       <div className="relative text-sm text-right" ref={dropdownRef}>
         {user ? (
-          <div className="relative">
+          <>
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => setOpenMenu((prev) => !prev)}
             >
-              <FaUserCircle className="text-xl text-primary" />
+              <img
+                src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user.username}`}
+                alt="Avatar"
+                className="w-8 h-8 rounded-full border-2 border-gray-300 hover:border-primary transition"
+              />
               <p className="font-semibold text-sm flex items-center gap-2">
                 {user.username}
                 <span className="text-xs text-muted">⭐ {user.points} pts</span>
@@ -100,34 +92,64 @@ export default function ProfileMenu() {
             </div>
 
             {openMenu && (
-              <div className="absolute right-0 mt-2 bg-card text-foreground rounded-md shadow-lg w-64 p-4 z-10 text-left">
-                {/* Leaderboard */}
-                <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Leaderboard</p>
-                <ul className="text-sm space-y-1 mb-3">
-                  {leaderboard.length === 0 ? (
-                    <p className="text-xs text-muted">No data yet.</p>
-                  ) : (
-                    leaderboard.map((u, idx) => (
-                      <li key={idx} className="flex justify-between text-muted-foreground">
-                        <span>
-                          {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'} {u.username}
-                        </span>
-                        <span className="text-primary font-semibold">{u.points}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
-                <a href="/leaderboard" className="block text-sm text-primary hover:underline mb-3">
-                  View Full Leaderboard →
-                </a>
+              <div className="absolute right-0 mt-2 bg-card text-foreground rounded-md shadow-lg w-72 p-4 z-10 text-left">
+                <Link
+                  to="/profile"
+                  className="block mb-3 text-sm text-primary font-semibold hover:underline"
+                  onClick={() => setOpenMenu(false)}
+                >
+                  View Profile
+                </Link>
 
-                {/* History */}
-                <p className="font-semibold mb-2 text-sm text-gray-700 dark:text-gray-200">Recent Games</p>
+                {user.profile?.bio && (
+                  <p className="text-sm text-muted-foreground mb-2">{user.profile.bio}</p>
+                )}
+                {user.profile?.avatar_url && (
+                  <img
+                    src={user.profile.avatar_url}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full mb-2"
+                  />
+                )}
+
+                <p className="font-semibold mb-2 text-sm flex justify-between">
+                  Achievements
+                  <Link
+                    to="/achievements"
+                    className="text-xs text-blue-500 hover:underline"
+                    onClick={() => setOpenMenu(false)}
+                  >
+                    View all
+                  </Link>
+                </p>
+                {user.achievements?.length ? (
+                  <ul className="text-sm space-y-1 mb-3">
+                    {user.achievements.map((a, idx) => (
+                      <li key={idx} className="text-xs text-green-700 dark:text-green-400">
+                        🏆 <strong>{a.title}</strong> – {a.description}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-muted"></p>
+                )}
+
+                <p className="font-semibold mb-2 text-sm flex justify-between">
+                  History
+                  <Link
+                    to="/history"
+                    className="text-xs text-blue-500 hover:underline"
+                    onClick={() => setOpenMenu(false)}
+                  >
+                    View all
+                  </Link>
+                </p>
                 {user.history?.length ? (
                   <ul className="text-sm space-y-1">
                     {user.history.slice(0, 3).map((game, idx) => (
                       <li key={idx} className="text-muted-foreground">
-                        {game.genre} – {game.score}/{game.total} on {new Date(game.date).toLocaleDateString()}
+                        {game.genre} – {game.score}/{game.total} on{' '}
+                        {new Date(game.date).toLocaleDateString()}
                       </li>
                     ))}
                   </ul>
@@ -135,9 +157,30 @@ export default function ProfileMenu() {
                   <p className="text-xs text-muted">No history yet.</p>
                 )}
 
-                <a href="/history" className="block text-sm text-primary hover:underline mt-2">
-                  View Full History →
-                </a>
+                <p className="font-semibold mb-2 mt-4 text-sm flex justify-between">
+                  Leaderboard
+                  <Link
+                    to="/leaderboard"
+                    className="text-xs text-blue-500 hover:underline"
+                    onClick={() => setOpenMenu(false)}
+                  >
+                    View all
+                  </Link>
+                </p>
+                {leaderboard.length === 0 ? (
+                  <p className="text-xs text-muted">No data yet.</p>
+                ) : (
+                  <ul className="text-sm space-y-1 mb-3">
+                    {leaderboard.map((u, idx) => (
+                      <li key={idx} className="flex justify-between text-muted-foreground">
+                        <span>
+                          {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'} {u.username}
+                        </span>
+                        <span className="text-primary font-semibold">{u.points}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 <button
                   onClick={() => {
@@ -151,16 +194,17 @@ export default function ProfileMenu() {
                 </button>
               </div>
             )}
-          </div>
+          </>
         ) : (
-          <FaUserCircle
-            className="text-2xl cursor-pointer text-gray-600 dark:text-gray-300 hover:text-primary"
+          <img
+            src={`https://api.dicebear.com/7.x/adventurer/svg?seed=guest`}
+            alt="Guest Avatar"
+            className="w-8 h-8 rounded-full cursor-pointer border-2 border-gray-300 hover:border-primary transition"
             onClick={() => setShowModal(true)}
           />
         )}
       </div>
 
-      {/* Login/Signup Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -175,7 +219,6 @@ export default function ProfileMenu() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-card text-foreground p-6 rounded-lg w-96 max-w-full shadow-lg relative"
             >
-              {/* Tabs */}
               <div className="flex justify-between mb-4 border-b">
                 {['login', 'register'].map((t) => (
                   <button
@@ -183,69 +226,74 @@ export default function ProfileMenu() {
                     className={`w-1/2 py-2 font-semibold ${
                       tab === t ? 'border-b-2 border-primary text-primary' : 'text-muted'
                     }`}
-                    onClick={() => {
-                      setTab(t);
-                      setForm({ email: '', password: '', username: '' });
-                    }}
+                    onClick={() => setTab(t)}
                   >
                     {t === 'login' ? 'Login' : 'Register'}
                   </button>
                 ))}
               </div>
 
-              {tab === 'register' && (
-                <input
-                  type="text"
-                  placeholder="Username"
-                  value={form.username}
-                  onChange={(e) => setForm({ ...form, username: e.target.value })}
-                  onKeyDown={handleKeyDown}
-                  className="w-full mb-2 px-3 py-2 border border-default bg-background text-foreground"
-                />
-              )}
-
-              <input
-                type="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                onKeyDown={handleKeyDown}
-                className="w-full mb-2 px-3 py-2 border border-default bg-background text-foreground"
-              />
-
-              <div className="relative mb-4">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Password"
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  onKeyDown={handleKeyDown}
-                  className="w-full px-3 py-2 border border-default bg-background text-foreground"
-                />
-                <span
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-muted"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
-              </div>
-
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className={`w-full bg-primary text-white py-2 rounded text-sm ${
-                  loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
-                }`}
+              <Formik
+                initialValues={{ email: '', password: '', username: '' }}
+                validationSchema={schema}
+                onSubmit={handleSubmit}
               >
-                {loading ? 'Submitting...' : tab === 'login' ? 'Login' : 'Register'}
-              </button>
+                {({ isSubmitting }) => (
+                  <Form className="space-y-3">
+                    {tab === 'register' && (
+                      <div>
+                        <Field
+                          type="text"
+                          name="username"
+                          placeholder="Username"
+                          className="w-full px-3 py-2 border border-default bg-background text-foreground"
+                        />
+                        <ErrorMessage name="username" component="div" className="text-xs text-red-500" />
+                      </div>
+                    )}
+
+                    <div>
+                      <Field
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        className="w-full px-3 py-2 border border-default bg-background text-foreground"
+                      />
+                      <ErrorMessage name="email" component="div" className="text-xs text-red-500" />
+                    </div>
+
+                    <div className="relative">
+                      <Field
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        placeholder="Password"
+                        className="w-full px-3 py-2 border border-default bg-background text-foreground"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-muted"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                      <ErrorMessage name="password" component="div" className="text-xs text-red-500" />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full bg-primary text-white py-2 rounded text-sm ${
+                        isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                      }`}
+                    >
+                      {isSubmitting ? 'Submitting...' : tab === 'login' ? 'Login' : 'Register'}
+                    </button>
+                  </Form>
+                )}
+              </Formik>
 
               <div className="text-xs text-center text-muted mt-3">
-                <button
-                  className="underline"
-                  onClick={() => window.open('/login/google', '_self')}
-                >
-                  Sign in with Google
+                <button className="underline" onClick={() => window.open('/login/google', '_self')}>
+                  
                 </button>
               </div>
 
@@ -259,7 +307,6 @@ export default function ProfileMenu() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </>
   );
 }

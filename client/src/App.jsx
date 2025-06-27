@@ -11,6 +11,8 @@ import './index.css';
 import { useState, useEffect } from 'react';
 import LeaderboardPage from './pages/LeaderboardPage';
 import History from "./pages/History";
+import Achievements from './pages/Achievements';
+import Profile from './pages/Profile';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -39,6 +41,10 @@ export default function App() {
           <Route path="/quiz/guessthesong" element={<SongQuiz />} />
           <Route path="/history" element={<History />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/achievements" element={<Achievements />} />
+          <Route path="/profile" element={<Profile />} />
+
+          {/* Add more routes as needed */}
 
         </Routes>
       </Router>

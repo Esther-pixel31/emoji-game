@@ -1,6 +1,7 @@
 import allQuestions from '../data/movie-characters.json';
 import QuizTemplate from '../components/QuizTemplate';
 
+
 const getRandomQuestions = () => {
   return allQuestions
     .sort(() => 0.5 - Math.random())

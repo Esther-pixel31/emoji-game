@@ -6,7 +6,7 @@ export default function MarvelQuiz() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const shuffled = [...marvelData].sort(() => Math.random() - 0.5).slice(0, 30);
+    const shuffled = [...marvelData].sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffled);
   }, []);
 

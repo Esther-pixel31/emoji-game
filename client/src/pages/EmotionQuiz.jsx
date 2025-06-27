@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import QuizTemplate from '../components/QuizTemplate';
 import emotionData from '../data/emotion.json';
+import badgeList from '../data/achievements';
 
 export default function EmotionQuiz() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     // Shuffle and optionally filter by difficulty here if needed
-    const shuffled = [...emotionData].sort(() => Math.random() - 0.5).slice(0, 30);
+    const shuffled = [...emotionData].sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffled);
   }, []);
 

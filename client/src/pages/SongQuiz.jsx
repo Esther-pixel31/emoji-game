@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import QuizTemplate from '../components/QuizTemplate';
 import songData from '../data/song.json';
 
+
 export default function SongQuiz() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const shuffled = [...songData].sort(() => Math.random() - 0.5).slice(0, 30);
+    const shuffled = [...songData].sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffled);
   }, []);
 

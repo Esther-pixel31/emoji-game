@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 export default function HistoryPage() {
   const { user } = useAuth();
@@ -19,20 +20,22 @@ export default function HistoryPage() {
   const [dateFilter, setDateFilter] = useState('');
 
   // Flexible genre mapping
-  const genreRoutes = {
-    moviecharacters: 'moviecharacters',
-    movies: 'moviecharacters',
-    'movie characters': 'moviecharacters',
-    emotionquiz: 'emotionquiz',
-    emotions: 'emotionquiz',
-    'emotion quiz': 'emotionquiz',
-    marvel: 'marvelcharacters',
-    'marvel heroes': 'marvelcharacters',
-    marvelcharacters: 'marvelcharacters',
-    songs: 'guessthesong',
-    'guess the song': 'guessthesong',
-    guessthesong: 'guessthesong',
-  };
+ const genreRoutes = {
+  moviecharacters: 'moviecharacters',
+  movies: 'moviecharacters',
+  'movie characters': 'moviecharacters',
+  emotionquiz: 'emotionquiz',
+  emotions: 'emotionquiz',
+  'emotion quiz': 'emotionquiz',
+  emotion: 'emotionquiz',
+  marvel: 'marvelcharacters',
+  'marvel heroes': 'marvelcharacters',
+  marvelcharacters: 'marvelcharacters',
+  songs: 'guessthesong',
+  'guess the song': 'guessthesong',
+  guessthesong: 'guessthesong',
+};
+
 
   if (!user || !user.history) {
     return <div className="p-6 text-center">Loading history...</div>;
@@ -55,14 +58,16 @@ export default function HistoryPage() {
     }));
 
   const handleReplay = (genre) => {
-    const normalized = genre.toLowerCase().replace(/\s+/g, '');
-    const path = genreRoutes[normalized];
-    if (path) {
-      navigate(`/quiz/${path}`);
-    } else {
-      console.warn(`No route defined for genre: ${genre}`);
-    }
-  };
+  const normalized = genre.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const path = genreRoutes[normalized];
+
+  if (path) {
+    navigate(`/quiz/${path}`);
+  } else {
+    console.warn(`No route for genre "${genre}" → "${normalized}"`);
+    toast.error('Replay not available for this genre');
+  }
+};
 
   return (
     <motion.div

@@ -15,6 +15,8 @@ export default function QuizTemplate({ title, questions, genreKey }) {
   const [wrong, setWrong] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [answers, setAnswers] = useState([]);
+  const [maxStreak, setMaxStreak] = useState(0);
+
 
   const current = questions[index];
   const { fetchWithAutoRefresh, fetchUser } = useAuth();
@@ -55,18 +57,21 @@ export default function QuizTemplate({ title, questions, genreKey }) {
   ]);
 
   if (isCorrect) {
-    const earned = 50;
-    const streakBonus = earned * multiplier;
-    setScore((prev) => prev + streakBonus);
+  const earned = 50;
+  const newStreak = streak + 1;
 
-    const newStreak = streak + 1;
-    setStreak(newStreak);
-    setMultiplier(1 + Math.floor(newStreak / 3));
-  } else {
-    setWrong((prev) => prev + 1);
-    setStreak(0);
-    setMultiplier(1);
-  }
+  setStreak(newStreak);
+  setMaxStreak((prev) => Math.max(prev, newStreak));
+
+  const streakBonus = earned * multiplier;
+  setScore((prev) => prev + streakBonus);
+  setMultiplier(1 + Math.floor(newStreak / 3));
+} else {
+  setWrong((prev) => prev + 1);
+  setStreak(0);
+  setMultiplier(1);
+}
+
 
   const hasNext = index + 1 < questions.length;
   if (hasNext) {
@@ -84,11 +89,6 @@ export default function QuizTemplate({ title, questions, genreKey }) {
     if (!showResult) return;
     const handleQuizComplete = async () => {
       try {
-        await fetchWithAutoRefresh('/update-points', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ points: score }),
-        });
 
         await fetchWithAutoRefresh('/add-history', {
           method: 'POST',
@@ -98,6 +98,7 @@ export default function QuizTemplate({ title, questions, genreKey }) {
             score,
             total: questions.length,
             date: new Date().toISOString(),
+            streak: maxStreak,
           }),
         });
 

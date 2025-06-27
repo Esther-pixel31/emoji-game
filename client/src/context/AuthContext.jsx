@@ -10,7 +10,6 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async () => {
-    // No need to POST credentials here; UI handles it.
     return await fetchUser();
   };
 
@@ -27,22 +26,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const fetchUser = async () => {
-    try {
-      const res = await fetchWithAutoRefresh('/me');
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
-        return true;
-      }
-    } catch (err) {
-      console.error('Fetch user failed:', err);
-    }
-
-    setUser(null);
-    return false;
-  };
-
   const fetchWithAutoRefresh = async (path, options = {}) => {
     let res = await fetch(`/api${path}`, {
       ...options,
@@ -50,6 +33,7 @@ export function AuthProvider({ children }) {
     });
 
     if (res.status === 401) {
+      // Try to refresh token
       const refreshRes = await fetch('/api/refresh', {
         method: 'POST',
         credentials: 'include',
@@ -68,30 +52,118 @@ export function AuthProvider({ children }) {
     return res;
   };
 
-  const updatePoints = async (points) => {
-  try {
-    const res = await fetchWithAutoRefresh('/update-points', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ points }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setUser((prev) => ({ ...prev, points: data.points }));
-    } else {
-      console.error('Failed to update points');
+  const fetchUser = async () => {
+    try {
+      const res = await fetchWithAutoRefresh('/me');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+        return true;
+      }
+    } catch (err) {
+      console.error('Fetch user failed:', err);
     }
-  } catch (err) {
-    console.error('Update points error:', err);
-  }
-};
 
+    setUser(null);
+    return false;
+  };
+
+  const fetchMe = async () => {
+    try {
+      const res = await fetchWithAutoRefresh('/me');
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.error('Fetch /me failed:', err);
+    }
+    return null;
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetchWithAutoRefresh('/profile');
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.error('Fetch /profile failed:', err);
+    }
+    return null;
+  };
+
+  const updatePoints = async (points) => {
+    try {
+      const res = await fetchWithAutoRefresh('/update-points', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ points }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser((prev) => ({ ...prev, points: data.points }));
+      } else {
+        console.error('Failed to update points');
+      }
+    } catch (err) {
+      console.error('Update points error:', err);
+    }
+  };
+
+  const updateProfile = async (updates) => {
+    try {
+      const res = await fetchWithAutoRefresh('/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+
+      if (res.ok) {
+        await fetchUser(); // Refresh base user data
+        return true;
+      } else {
+        console.error('Failed to update profile');
+      }
+    } catch (err) {
+      console.error('Update profile error:', err);
+    }
+    return false;
+  };
+
+  const deleteAccount = async () => {
+    try {
+      const res = await fetchWithAutoRefresh('/delete-account', {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setUser(null);
+        return true;
+      } else {
+        console.error('Failed to delete account');
+      }
+    } catch (err) {
+      console.error('Delete account error:', err);
+    }
+    return false;
+  };
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, logout, fetchUser, fetchWithAutoRefresh, updatePoints  }}
+      value={{
+        user,
+        setUser,
+        login,
+        logout,
+        fetchUser,
+        fetchMe,
+        fetchProfile,
+        fetchWithAutoRefresh,
+        updatePoints,
+        updateProfile,
+        deleteAccount,
+      }}
     >
       {children}
     </AuthContext.Provider>
