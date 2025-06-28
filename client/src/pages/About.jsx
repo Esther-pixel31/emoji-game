@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import emojiPattern from "../assets/emoji-pattern.png"; // Adjust if needed
+import emojiPattern from "../assets/emoji-pattern.png"; 
 
 export default function About() {
   return (
@@ -11,7 +11,7 @@ export default function About() {
         backgroundSize: "150px",
       }}
     >
-      {/* Overlay that adapts to light/dark mode */}
+      
       <div className="absolute inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-sm"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-8 space-y-12 text-left">
@@ -69,7 +69,7 @@ export default function About() {
         >
           <h3 className="text-2xl font-semibold mb-2 tracking-tight">👩‍💻 Developer Credits</h3>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            Made with ❤️ by <strong>Esther Mutua</strong>. Contributions, feedback, and ideas are always welcome!
+            Made with tears by <strong>Esther Mutua</strong>. Contributions, feedback, and ideas are always welcome!
           </p>
         </motion.div>
       </div>

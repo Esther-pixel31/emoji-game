@@ -33,7 +33,6 @@ export function AuthProvider({ children }) {
     });
 
     if (res.status === 401) {
-      // Try to refresh token
       const refreshRes = await fetch('/api/refresh', {
         method: 'POST',
         credentials: 'include',
@@ -120,7 +119,7 @@ export function AuthProvider({ children }) {
       });
 
       if (res.ok) {
-        await fetchUser(); // Refresh base user data
+        await fetchUser(); 
         return true;
       } else {
         console.error('Failed to update profile');

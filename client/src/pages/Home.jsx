@@ -20,13 +20,13 @@ export default function Home() {
   return (
     <>
       <section
-  className="relative overflow-hidden py-16 text-center flex flex-col items-center"
-  style={{
-    backgroundImage: `url(${emojiPattern})`,
-    backgroundRepeat: 'repeat',
-    backgroundSize: '150px',
-    animation: 'moveBg 40s linear infinite',
-  }}
+      className="relative overflow-hidden py-16 text-center flex flex-col items-center"
+      style={{
+        backgroundImage: `url(${emojiPattern})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '150px',
+        animation: 'moveBg 40s linear infinite',
+      }}
 >
   <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
   <h1 className="pt-24 text-5xl font-extrabold mb-4 animate-bounce relative z-10">

@@ -7,12 +7,12 @@ export default function TimerBar({ time, max = 60 }) {
   return (
     <div className="fixed top-20
      left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center gap-2">
-      {/* Label */}
+      
       <span className="text-sm font-semibold text-gray-700 dark:text-gray-100">
         ⏳ Time Left: {time}s
       </span>
 
-      {/* Bar with animation */}
+      
       <AnimatePresence>
         <motion.div
           key={isTimeout ? 'timeout' : 'timer'}

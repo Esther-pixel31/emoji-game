@@ -23,7 +23,6 @@ export default function App() {
   root.classList.remove('light', 'dark');
   root.classList.add(darkMode ? 'dark' : 'light');
 
-  // ✅ Save to localStorage
   localStorage.setItem('theme', darkMode ? 'dark' : 'light');
 }, [darkMode]);
 
@@ -44,7 +43,7 @@ export default function App() {
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/profile" element={<Profile />} />
 
-          {/* Add more routes as needed */}
+          
 
         </Routes>
       </Router>

@@ -10,7 +10,7 @@ export default function QuizCard({
     <div className="bg-card text-card-foreground rounded-2xl shadow-xl p-8 max-w-md w-full text-center space-y-6">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold">🧠 Guess the Phrase</h2>
-        <p className="text-5xl mb-8">{quiz.emojis}</p>  {/* Increase mb-6 → mb-8 */}
+        <p className="text-5xl mb-8">{quiz.emojis}</p> 
       </div>
 
       <input

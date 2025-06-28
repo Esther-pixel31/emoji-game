@@ -63,7 +63,7 @@ export default function LeaderboardPage() {
 
         {!loading && !error && (
           <>
-            {/* Top 3 Podium */}
+            
             <div className="flex justify-center items-end gap-6 mb-12 flex-wrap">
               {topThree.map((u, i) => {
                 const heightClass = ['h-44', 'h-40', 'h-34'][i] || 'h-30';
@@ -94,7 +94,7 @@ export default function LeaderboardPage() {
               })}
             </div>
 
-            {/* Share Button */}
+            
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
@@ -105,7 +105,7 @@ export default function LeaderboardPage() {
               Share this leaderboard
             </button>
 
-            {/* Full Leaderboard */}
+            
             <ol className="space-y-4 text-left">
               {rest.length === 0 ? (
                 <p className="text-muted">No leaderboard data yet.</p>

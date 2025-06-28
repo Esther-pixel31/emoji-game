@@ -7,7 +7,7 @@ export default function EmotionQuiz() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    // Shuffle and optionally filter by difficulty
+    
     const shuffled = [...emotionData].sort(() => Math.random() - 0.5).slice(0, 10);
     setQuestions(shuffled);
   }, []);

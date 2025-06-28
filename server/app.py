@@ -14,7 +14,7 @@ from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
 from dateutil.parser import isoparse
 
-# Allow HTTP for OAuth (not recommended in production)
+
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoji.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_COOKIE_SECURE'] = False
 
-# JWT Config
+
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
@@ -35,12 +35,10 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 app.config['JWT_REFRESH_COOKIE_PATH'] = '/api/refresh'
 
-# Initialize extensions
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-# Google OAuth Setup
 google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
@@ -53,7 +51,6 @@ google_bp = make_google_blueprint(
 )
 app.register_blueprint(google_bp, url_prefix="/login")
 
-# Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -62,7 +59,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     points = db.Column(db.Integer, default=0)
 
-    # ✅ Updated to add cascade
+    
     history = db.relationship(
         'GameHistory',
         backref='user',
@@ -119,7 +116,7 @@ class Achievement(db.Model):
 with app.app_context():
     db.create_all()
 
-# Auth Routes
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -215,7 +212,7 @@ def google_authorized():
     set_refresh_cookies(resp, refresh_token)
     return resp
 
-# Protected Routes
+
 @app.route('/api/user', methods=['GET'])
 @jwt_required(locations=["cookies"])
 def profile():
@@ -250,21 +247,21 @@ def add_history():
         data = request.get_json()
         print("📥 Incoming history data:", data)
 
-        # Create game history entry
+        
         history = GameHistory(
             genre=data['genre'],
             score=data['score'],
             total=data['total'],
             date_played=isoparse(data['date']),
-            streak=data.get('streak', 0),  # ✅ accept streak
+            streak=data.get('streak', 0),  
             user_id=user.id
         )
         db.session.add(history)
 
-        # Update user points
+       
         user.points += data['score']
 
-        # Track newly awarded achievements
+        
         new_achievements = []
 
         def award(title, description):
@@ -278,24 +275,24 @@ def add_history():
             else:
                 print(f"⚠️ Already has: {title}")
 
-        # 🎯 First Quiz
+       
         if len(user.history) == 0:
             award('First Quiz', 'Completed your first quiz')
 
-        # 🏆 Perfect Score
+        
         if history.score == history.total:
             award('Perfect Score', 'Scored perfectly on a quiz')
 
-        # 🔥 Streak Master
+       
         if history.streak >= 3:
             award('Streak Master', 'Got 3+ correct answers in a row')
 
-        # 💯 500 Points Club
+        
         if user.points >= 500:
             award('500 Points Club', 'Earned 500+ total points')
 
-        # 📊 X Games Played
-        total_games = len(user.history) + 1  # include current one
+       
+        total_games = len(user.history) + 1  
         milestones = {
             5: '5 Games Played',
             10: '10 Games Played',
@@ -336,7 +333,7 @@ def me():
             "total": h.total,
             "date": h.date_played.isoformat(),
         }
-        for h in user.history  # This assumes a relationship is defined
+        for h in user.history  
     ]
 
     return jsonify({
@@ -408,6 +405,6 @@ def delete_account():
     return jsonify({"message": "Account deleted"}), 200
 
 
-# Run Server
+
 if __name__ == '__main__':
     app.run(debug=True)

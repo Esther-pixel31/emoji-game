@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import emojiPattern from "../assets/emoji-pattern.png"; // Adjust path if needed
+import emojiPattern from "../assets/emoji-pattern.png"; 
 
 export default function Contact() {
   return (
@@ -11,7 +11,7 @@ export default function Contact() {
         backgroundSize: "150px",
       }}
     >
-      {/* Overlay that adapts to light/dark */}
+      
       <div className="absolute inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-sm"></div>
 
       <motion.div
