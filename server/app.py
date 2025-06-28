@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import (
@@ -13,7 +13,7 @@ from passlib.hash import pbkdf2_sha256
 from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
 from dateutil.parser import isoparse
-
+from sqlalchemy_serializer import SerializerMixin
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -23,8 +23,6 @@ CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5173"}}, supports_
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoji.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SESSION_COOKIE_SECURE'] = False
-
 
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -51,7 +49,8 @@ google_bp = make_google_blueprint(
 )
 app.register_blueprint(google_bp, url_prefix="/login")
 
-class User(db.Model):
+
+class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -59,19 +58,11 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     points = db.Column(db.Integer, default=0)
 
-    
-    history = db.relationship(
-        'GameHistory',
-        backref='user',
-        lazy=True,
-        cascade="all, delete-orphan"
-    )
+    history = db.relationship('GameHistory', backref='user', lazy=True, cascade="all, delete-orphan")
+    achievements = db.relationship('Achievement', secondary='user_achievements', back_populates='users')
+    profile = db.relationship('Profile', uselist=False, back_populates='user')
 
-    achievements = db.relationship(
-        'Achievement',
-        secondary='user_achievements',
-        back_populates='users'
-    )
+    serialize_rules = ('-password_hash', '-achievements.users', '-history.user', '-profile.user')
 
     def set_password(self, pw):
         self.password_hash = pbkdf2_sha256.hash(pw)
@@ -79,8 +70,7 @@ class User(db.Model):
     def check_password(self, pw):
         return pbkdf2_sha256.verify(pw, self.password_hash)
 
-
-class GameHistory(db.Model):
+class GameHistory(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     genre = db.Column(db.String(50), nullable=False)
     score = db.Column(db.Integer, nullable=False)
@@ -89,6 +79,7 @@ class GameHistory(db.Model):
     streak = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    serialize_rules = ('-user',)
 
 user_achievements = db.Table(
     'user_achievements',
@@ -96,25 +87,26 @@ user_achievements = db.Table(
     db.Column('achievement_id', db.Integer, db.ForeignKey('achievement.id'), primary_key=True)
 )
 
-
-class Profile(db.Model):
+class Profile(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     bio = db.Column(db.String(255))
     avatar_url = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
-    user = db.relationship('User', backref=db.backref('profile', uselist=False))
+    user = db.relationship('User', back_populates='profile')
 
-class Achievement(db.Model):
+    serialize_rules = ('-user',)
+
+class Achievement(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255))
-    users = db.relationship(
-        'User',
-        secondary='user_achievements',
-        back_populates='achievements')
+    users = db.relationship('User', secondary='user_achievements', back_populates='achievements')
+
+    serialize_rules = ('-users',)
 
 with app.app_context():
     db.create_all()
+
 
 
 @app.route('/api/register', methods=['POST'])
@@ -130,7 +122,6 @@ def register():
     user.set_password(data['password'])
     db.session.add(user)
     db.session.commit()
-    print(f"User {user.username} committed to DB")
 
     access_token = create_access_token(identity=user.id)
     refresh_token = create_refresh_token(identity=user.id)
@@ -155,17 +146,11 @@ def login():
 
     resp = jsonify(
         message="Login successful",
-        user={
-            "id": user.id,
-            "email": user.email,
-            "username": user.username
-        }
+        user=user.to_dict()
     )
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
     return resp, 200
-
-
 
 @app.route("/api/refresh", methods=["POST"])
 @jwt_required(refresh=True)
@@ -177,12 +162,139 @@ def refresh():
     set_access_cookies(resp, access_token)
     return resp, 200
 
-
 @app.route('/api/logout', methods=['POST'])
 def logout():
     resp = jsonify(message="Logged out")
     unset_jwt_cookies(resp)
     return resp, 200
+
+@app.route('/api/me', methods=['GET'])
+@jwt_required()
+def me():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify(message="User not found"), 404
+    return jsonify(user.to_dict()), 200
+
+@app.route('/api/leaderboard')
+def leaderboard():
+    top_users = User.query.order_by(User.points.desc()).limit(10).all()
+    return jsonify([
+        {"username": u.username, "points": u.points}
+        for u in top_users
+    ])
+
+@app.route('/api/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    uid = get_jwt_identity()
+    user = User.query.get_or_404(uid)
+    return jsonify(user.to_dict()), 200
+
+@app.route('/api/update-profile', methods=['POST'])
+@jwt_required()
+def update_profile_post():
+    data = request.get_json()
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    user.name = data.get('name', user.name)
+    user.username = data.get('username', user.username)
+    user.email = data.get('email', user.email)
+
+    db.session.commit()
+    return jsonify({"msg": "Profile updated"}), 200
+
+@app.route('/api/update-points', methods=['POST'])
+@jwt_required()
+def update_points():
+    uid = get_jwt_identity()
+    user = User.query.get(uid)
+    if not user:
+        return jsonify(message="User not found"), 404
+
+    pts = request.get_json().get('points', 0)
+    user.points += pts
+    db.session.commit()
+
+    return jsonify(points=user.points), 200
+
+@app.route('/api/add-history', methods=['POST'])
+@jwt_required()
+def add_history():
+    uid = get_jwt_identity()
+    user = User.query.get(uid)
+    if not user:
+        return jsonify(message="User not found"), 404
+
+    try:
+        data = request.get_json()
+        history = GameHistory(
+            genre=data['genre'],
+            score=data['score'],
+            total=data['total'],
+            date_played=isoparse(data['date']),
+            streak=data.get('streak', 0),
+            user_id=user.id
+        )
+        db.session.add(history)
+        user.points += data['score']
+
+        new_achievements = []
+
+        def award(title, description):
+            achievement = Achievement.query.filter_by(title=title).first()
+            if achievement and achievement not in user.achievements:
+                user.achievements.append(achievement)
+                new_achievements.append({'title': title, 'description': description})
+
+        if len(user.history) == 0:
+            award('First Quiz', 'Completed your first quiz')
+
+        if history.score == history.total:
+            award('Perfect Score', 'Scored perfectly on a quiz')
+
+        if history.streak >= 3:
+            award('Streak Master', 'Got 3+ correct answers in a row')
+
+        if user.points >= 500:
+            award('500 Points Club', 'Earned 500+ total points')
+
+        total_games = len(user.history) + 1
+        milestones = {
+            5: '5 Games Played',
+            10: '10 Games Played',
+            15: '15 Games Played',
+            20: '20 Games Played',
+            25: '25 Games Played',
+            30: '30 Games Played'
+        }
+        if total_games in milestones:
+            award(milestones[total_games], f"Completed {total_games} quizzes")
+
+        db.session.commit()
+
+        return jsonify({
+            'message': 'History added',
+            'newAchievements': new_achievements
+        }), 201
+
+    except Exception as e:
+        return jsonify({'message': 'Server error', 'error': str(e)}), 500
+
+@app.route('/api/delete-account', methods=['DELETE'])
+@jwt_required()
+def delete_account():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "Account deleted"}), 200
 
 @app.route('/login/google/authorized')
 def google_authorized():
@@ -211,200 +323,6 @@ def google_authorized():
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
     return resp
-
-
-@app.route('/api/user', methods=['GET'])
-@jwt_required(locations=["cookies"])
-def profile():
-    uid = get_jwt_identity()
-    user = User.query.get(uid)
-    return jsonify(id=user.id, email=user.email, username=user.username, points=user.points), 200
-
-@app.route('/api/update-points', methods=['POST'])
-@jwt_required()
-def update_points():
-    uid = get_jwt_identity()
-    user = User.query.get(uid)
-
-    if not user:
-        return jsonify(message="User not found"), 404
-
-    pts = request.get_json().get('points', 0)
-    user.points += pts
-    db.session.commit()
-
-    return jsonify(points=user.points), 200
-
-@app.route('/api/add-history', methods=['POST'])
-@jwt_required()
-def add_history():
-    uid = get_jwt_identity()
-    user = User.query.get(uid)
-    if not user:
-        return jsonify(message="User not found"), 404
-
-    try:
-        data = request.get_json()
-        print("📥 Incoming history data:", data)
-
-        
-        history = GameHistory(
-            genre=data['genre'],
-            score=data['score'],
-            total=data['total'],
-            date_played=isoparse(data['date']),
-            streak=data.get('streak', 0),  
-            user_id=user.id
-        )
-        db.session.add(history)
-
-       
-        user.points += data['score']
-
-        
-        new_achievements = []
-
-        def award(title, description):
-            achievement = Achievement.query.filter_by(title=title).first()
-            if achievement and achievement not in user.achievements:
-                user.achievements.append(achievement)
-                new_achievements.append({'title': title, 'description': description})
-                print(f"🏆 Awarded: {title}")
-            elif not achievement:
-                print(f"❌ Achievement not found: {title}")
-            else:
-                print(f"⚠️ Already has: {title}")
-
-       
-        if len(user.history) == 0:
-            award('First Quiz', 'Completed your first quiz')
-
-        
-        if history.score == history.total:
-            award('Perfect Score', 'Scored perfectly on a quiz')
-
-       
-        if history.streak >= 3:
-            award('Streak Master', 'Got 3+ correct answers in a row')
-
-        
-        if user.points >= 500:
-            award('500 Points Club', 'Earned 500+ total points')
-
-       
-        total_games = len(user.history) + 1  
-        milestones = {
-            5: '5 Games Played',
-            10: '10 Games Played',
-            15: '15 Games Played',
-            20: '20 Games Played',
-            25: '25 Games Played',
-            30: '30 Games Played'
-        }
-        if total_games in milestones:
-            award(milestones[total_games], f"Completed {total_games} quizzes")
-
-        db.session.commit()
-
-        return jsonify({
-            'message': 'History added',
-            'newAchievements': new_achievements
-        }), 201
-
-    except Exception as e:
-        print("❌ Error in /add-history:", str(e))
-        return jsonify({'message': 'Server error', 'error': str(e)}), 500
-
-
-
-@app.route('/api/me', methods=['GET'])
-@jwt_required()
-def me():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-
-    if not user:
-        return jsonify(message="User not found"), 404
-
-    history = [
-        {
-            "genre": h.genre,
-            "score": h.score,
-            "total": h.total,
-            "date": h.date_played.isoformat(),
-        }
-        for h in user.history  
-    ]
-
-    return jsonify({
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-        "name": user.name,
-        "points": user.points,
-        "history": history,
-    }), 200
-
-@app.route('/api/leaderboard')
-def leaderboard():
-    top_users = User.query.order_by(User.points.desc()).limit(10).all()
-    return jsonify([
-        {"username": u.username, "points": u.points}
-        for u in top_users
-    ])
-
-@app.route('/api/profile', methods=['GET'])
-@jwt_required()
-def get_profile():
-    uid = get_jwt_identity()
-    user = User.query.get_or_404(uid)
-
-    profile_data = {
-        "bio": user.profile.bio if user.profile else "",
-        "avatar_url": user.profile.avatar_url if user.profile else "",
-    }
-
-    return jsonify({
-        "username": user.username,
-        "email": user.email,
-        "points": user.points,
-        "profile": profile_data,
-        "achievements": [
-            {"title": a.title, "description": a.description}
-            for a in user.achievements
-        ]
-    }), 200
-
-
-
-@app.route('/api/update-profile', methods=['POST'])
-@jwt_required()
-def update_profile_post():
-    data = request.get_json()
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-
-    user.name = data.get('name', user.name)
-    user.username = data.get('username', user.username)
-    user.email = data.get('email', user.email)
-
-    db.session.commit()
-    return jsonify({"msg": "Profile updated"}), 200
-
-@app.route('/api/delete-account', methods=['DELETE'])
-@jwt_required()
-def delete_account():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    db.session.delete(user)
-    db.session.commit()
-
-    return jsonify({"message": "Account deleted"}), 200
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
