@@ -60,7 +60,7 @@ export default function ProfilePage() {
 
   return (
     <section
-      className="relative px-6 py-20 min-h-screen"
+      className="relative px-4 sm:px-6 py-16 sm:py-20 min-h-screen"
       style={{
         backgroundImage: `url(${emojiPattern})`,
         backgroundRepeat: 'repeat',
@@ -69,12 +69,12 @@ export default function ProfilePage() {
     >
       <div className="absolute inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-sm"></div>
 
-      <div className="relative z-10 max-w-xl mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-8">
+      <div className="relative z-10 w-full max-w-lg mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-6 sm:p-8">
         <div className="flex justify-center mb-6">
           <img
             src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.username || 'user'}`}
-            alt="Profile Avatar"
-            className="w-24 h-24 rounded-full border-2 border-gray-300 shadow"
+            alt={`${user?.username || 'User'} avatar`}
+            className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 rounded-full border-2 border-gray-300 shadow"
           />
         </div>
 

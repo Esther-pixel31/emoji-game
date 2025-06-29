@@ -13,7 +13,7 @@ export default function EmotionQuiz() {
 
   return (
     <section
-      className="relative px-4 md:px-6 py-16 min-h-screen"
+      className="relative px-4 sm:px-6 py-16 sm:py-20 min-h-screen"
       style={{
         backgroundImage: `url(${emojiPattern})`,
         backgroundRepeat: 'repeat',
@@ -26,7 +26,7 @@ export default function EmotionQuiz() {
         {questions.length > 0 ? (
           <QuizTemplate title="😄 Emotion Quiz" questions={questions} genreKey="emotion" />
         ) : (
-          <p className="text-center mt-10 text-muted">Loading questions...</p>
+          <p className="text-center mt-10 text-gray-500 dark:text-gray-400 italic">Loading questions...</p>
         )}
       </div>
     </section>

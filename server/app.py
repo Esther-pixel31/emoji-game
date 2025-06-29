@@ -81,6 +81,16 @@ class GameHistory(db.Model, SerializerMixin):
 
     serialize_rules = ('-user',)
 
+    def to_dict(self, **kwargs):
+        data = super().to_dict(**kwargs)
+        # Add an ISO-formatted 'date' key for frontend compatibility
+        if self.date_played:
+            data['date'] = self.date_played.isoformat()
+        else:
+            data['date'] = None
+        return data
+
+
 user_achievements = db.Table(
     'user_achievements',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),

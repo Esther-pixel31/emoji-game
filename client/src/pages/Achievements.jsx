@@ -43,7 +43,7 @@ export default function AchievementsPage() {
 
   return (
     <section
-      className="relative px-6 py-20 min-h-screen"
+      className="relative px-4 sm:px-6 py-16 sm:py-20 min-h-screen"
       style={{
         backgroundImage: `url(${emojiPattern})`,
         backgroundRepeat: 'repeat',
@@ -53,17 +53,17 @@ export default function AchievementsPage() {
       <div className="absolute inset-0 bg-white/80 dark:bg-black/60 backdrop-blur-sm"></div>
 
       <motion.div
-        className="relative z-10 max-w-4xl mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-8"
+        className="relative z-10 w-full max-w-5xl mx-auto bg-white/90 dark:bg-black/80 rounded-3xl shadow-xl p-6 sm:p-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold mb-6 text-center">🏆 Achievements</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">🏆 Achievements</h1>
         {loading ? (
           <p className="text-center text-muted">Loading...</p>
         ) : (
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {achievements.map((a, idx) => {
               const unlocked = unlockedIds.includes(a.title);
               const highlight = justUnlocked.includes(a.title);
@@ -79,13 +79,13 @@ export default function AchievementsPage() {
                   }`}
                   initial={{ opacity: 0, y: 10, scale: highlight ? 1.1 : 1 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ delay: idx * 0.1, type: 'spring', stiffness: 300 }}
+                  transition={{ delay: idx * 0.08, type: 'spring', stiffness: 300 }}
                 >
-                  <div className="text-xl font-semibold mb-1">
+                  <div className="text-lg sm:text-xl font-semibold mb-1">
                     {unlocked ? '🏆 ' : '🔒 '}
                     {a.title}
                   </div>
-                  <p className="text-sm">{a.description}</p>
+                  <p className="text-xs sm:text-sm">{a.description}</p>
                 </motion.div>
               );
             })}
