@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LIGHT MODE */
+
 :root.light {
   --background: #fff1f2;
   --foreground: #1f2937;
@@ -17,7 +17,7 @@
   --hero-gradient: linear-gradient(to bottom, #ffe4e6, #fce7f3, #fff);
 }
 
-/* DARK MODE */
+
 :root.dark {
   --background: #1f2937;
   --foreground: #f9fafb;
@@ -26,25 +26,22 @@
   --card: #374151;
   --nav: #111827;
   --nav-text: #f9fafb;
-  --muted: #d1d5db; /* brighter for contrast */
+  --muted: #d1d5db; 
   --border: #4b5563;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   --hero-gradient: linear-gradient(to bottom, #172135, #172135, #7c7c7c);
 }
 
-/* Base background and text color */
 body {
   background-color: var(--background);
   color: var(--foreground);
 }
 
-/* Selection color for all modes */
 ::selection {
   background-color: var(--primary-dark);
   color: var(--foreground);
 }
 
-/* Inputs and focus states */
 input, textarea, select {
   background-color: var(--card);
   color: var(--foreground);
@@ -58,7 +55,6 @@ input:focus, textarea:focus, select:focus {
   outline-offset: 2px;
 }
 
-/* Utility classes for theming */
 .bg-background      { background-color: var(--background); }
 .text-foreground    { color: var(--foreground); }
 .bg-primary         { background-color: var(--primary); }
@@ -71,7 +67,6 @@ input:focus, textarea:focus, select:focus {
 .border-default     { border-color: var(--border); }
 .shadow-default     { box-shadow: var(--shadow); }
 
-/* Button (basic style) */
 .button {
   background-color: var(--primary);
   color: var(--foreground);
