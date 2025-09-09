@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "formik": "^2.4.6",
     "framer-motion": "^12.23.12",
     "lucide": "^0.542.0",
     "lucide-react": "^0.543.0",
