@@ -2,6 +2,9 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
+// 👇 Define API base URL from env (set in .env.development / .env.production)
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
@@ -15,7 +18,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/logout', {
+      await fetch(`${API_URL}/logout`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -27,19 +30,19 @@ export function AuthProvider({ children }) {
   };
 
   const fetchWithAutoRefresh = async (path, options = {}) => {
-    let res = await fetch(`/api${path}`, {
+    let res = await fetch(`${API_URL}${path}`, {
       ...options,
       credentials: 'include',
     });
 
     if (res.status === 401) {
-      const refreshRes = await fetch('/api/refresh', {
+      const refreshRes = await fetch(`${API_URL}/refresh`, {
         method: 'POST',
         credentials: 'include',
       });
 
       if (refreshRes.ok) {
-        res = await fetch(`/api${path}`, {
+        res = await fetch(`${API_URL}${path}`, {
           ...options,
           credentials: 'include',
         });
@@ -119,7 +122,7 @@ export function AuthProvider({ children }) {
       });
 
       if (res.ok) {
-        await fetchUser(); 
+        await fetchUser();
         return true;
       } else {
         console.error('Failed to update profile');

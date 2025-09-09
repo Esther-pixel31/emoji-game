@@ -19,7 +19,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
 load_dotenv()
-CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5173"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5173", "https://emoji-quiz-frontend.onrender.com"]}}, supports_credentials=True)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoji.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
