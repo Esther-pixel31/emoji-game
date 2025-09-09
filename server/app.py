@@ -28,14 +28,19 @@ app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=7)
-app.config['JWT_COOKIE_SECURE'] = False
+app.config['JWT_COOKIE_SECURE'] = True
+app.config["JWT_COOKIE_SAMESITE"] = "None"  
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 app.config['JWT_REFRESH_COOKIE_PATH'] = '/api/refresh'
+app.config["JWT_ACCESS_COOKIE_NAME"] = "token" 
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
+
+
+
 
 google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID"),
@@ -136,10 +141,15 @@ def register():
     access_token = create_access_token(identity=user.id)
     refresh_token = create_refresh_token(identity=user.id)
 
-    resp = jsonify(message="Registered successfully")
+    # Include user data in JSON response for frontend
+    resp = jsonify(message="Registered successfully", user=user.to_dict())
+
+    # Set cross-site JWT cookies
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
+
     return resp, 201
+
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -158,9 +168,13 @@ def login():
         message="Login successful",
         user=user.to_dict()
     )
+
+    # Set cookies for cross-site use
     set_access_cookies(resp, access_token)
     set_refresh_cookies(resp, refresh_token)
+
     return resp, 200
+
 
 @app.route("/api/refresh", methods=["POST"])
 @jwt_required(refresh=True)
